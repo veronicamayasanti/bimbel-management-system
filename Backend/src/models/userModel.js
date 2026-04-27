@@ -37,6 +37,13 @@ class UserModel {
             where: { id: id },
         });
     }
+
+    static async findByEmail(email) {
+        return prisma.user.findUnique({
+            where: { email },
+        });
+    }
+
 }
 
 export default UserModel;

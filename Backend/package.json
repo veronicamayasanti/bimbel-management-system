@@ -10,7 +10,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "Veronica Maya Santi",
   "license": "ISC",
   "dependencies": {
     "@prisma/client": "^5.22.0",
