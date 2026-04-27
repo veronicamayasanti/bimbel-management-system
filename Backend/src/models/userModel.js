@@ -15,7 +15,7 @@ class UserModel {
 
     static async findById(id) {
         return prisma.user.findUnique({
-            where: { id },
+            where: { id: id },
         });
     }
 
@@ -34,7 +34,7 @@ class UserModel {
 
     static async delete(id) {
         return prisma.user.delete({
-            where: { id },
+            where: { id: id },
         });
     }
 }
