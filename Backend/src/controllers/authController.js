@@ -1,7 +1,7 @@
 import AuthService from "../services/authService.js";
 
 class AuthController {
-    static async login(req, res) {
+    static async login(req, res, next) {
         try {
             const { email, password } = req.body;
             if (!email || !password) {
@@ -20,11 +20,11 @@ class AuthController {
             }
         } catch (error) {
             console.error(error);
-            res.status(500).json({ message: "Internal Server Error" });
+            next(error);
         }
     }
 
-    static async loginAdmin(req, res) {
+    static async loginAdmin(req, res, next) {
         try {
             const { username, password } = req.body;
             const result = await AuthService.loginAdmin(username, password);
@@ -39,7 +39,8 @@ class AuthController {
                 res.status(401).json({ message: "Invalid username or password" });
             }
         } catch (error) {
-            res.status(500).json({ message: "Internal Server Error" });
+            console.error(error);
+            next(error);
         }
     }
 

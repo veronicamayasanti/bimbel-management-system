@@ -9,17 +9,17 @@
 import UserService from "../services/userService.js";
 
 class UserController {
-    static async getAllUsers(req, res) {
+    static async getAllUsers(req, res, next) {
         try {
             const users = await UserService.getAllUsers();
             res.json(users);
         } catch (error) {
             console.error(error);
-            res.status(500).json({ message: "Internal Server Error" });
+            next(error);
         }
     }
 
-    static async getUserById(req, res) {
+    static async getUserById(req, res, next) {
         const { id } = req.params;
         try {
             const user = await UserService.getUserById(id);
@@ -30,16 +30,13 @@ class UserController {
             }
         } catch (error) {
             console.error(error);
-            res.status(500).json({ message: "Internal Server Error" });
+            next(error);
         }
     }
 
-    static async createUser(req, res) {
+    static async createUser(req, res, next) {
         try {
             const { full_name, email, password, telp_no, address, isActive } = req.body;
-            if (!full_name || !email || !password || !telp_no) {
-                return res.status(400).json({ message: "Missing required user fields" });
-            }
 
             const newUser = await UserService.createUser({
                 full_name,
@@ -51,11 +48,7 @@ class UserController {
             });
             res.status(201).json(newUser);
         } catch (error) {
-            console.error(error);
-            if (error.code === 'P2002') { // Error kode Prisma untuk unique constraint violation
-                return res.status(409).json({ message: "Email or Phone Number already exists." });
-            }
-            res.status(400).json({ message: error.message });
+            next(error);
         }
     }
 
@@ -63,7 +56,11 @@ class UserController {
         try {
             const updatedUser = await UserService.updateUser(req.params.id, req.body);
             if (updatedUser) {
-                res.json(updatedUser);
+                res.json({
+                    success: true,
+                    message: "Data berhasil diperbarui",
+                    user: updatedUser
+                });
             } else {
                 res.status(404).json({ message: "User not found" });
             }
@@ -86,7 +83,7 @@ class UserController {
             }
         } catch (error) {
             console.error(error);
-            res.status(500).json({ message: "Internal Server Error" });
+            next(error);
         }
     }
 }

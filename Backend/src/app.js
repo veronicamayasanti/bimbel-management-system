@@ -11,6 +11,8 @@ import dotenv from 'dotenv';
 import connectDB from './config/db.js';
 import userRoutes from './routes/userRoutes.js';
 import authRoutes from './routes/authRoutes.js';
+import errorMiddleware from './middleware/errorMiddleware.js';
+
 dotenv.config();
 
 const app = express();
@@ -20,8 +22,9 @@ app.use(express.json());
 app.use("/api/users", userRoutes)
 app.use("/api/auth", authRoutes);
 
+app.use(errorMiddleware);
 
-// Connect to Database dan jalankan server
+
 connectDB().then(() => {
     app.listen(port, () => {
         console.log(`Server is running on http://localhost:${port}`);
