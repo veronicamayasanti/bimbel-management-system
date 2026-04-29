@@ -9,9 +9,18 @@
 import { prisma } from "../config/db.js";
 
 class UserModel {
-    static async findAll() {
-        return prisma.user.findMany();
+    static async findAll(skip = 0, take = 10) {
+        return prisma.user.findMany({
+            skip: skip,
+            take: take,
+            orderBy: { created_at: 'desc' }
+        });
     }
+
+    static async count() {
+        return prisma.user.count();
+    }
+
 
     static async findById(id) {
         return prisma.user.findUnique({

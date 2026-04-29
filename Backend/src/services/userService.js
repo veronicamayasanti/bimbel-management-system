@@ -10,8 +10,12 @@ import UserModel from "../models/userModel.js";
 import bcrypt from 'bcryptjs';
 
 class UserService {
-    static async getAllUsers() {
-        const users = await UserModel.findAll();
+    static async getAllUsers(page = 1, limit = 10) {
+        const skip = (page - 1) * limit;
+
+        const users = await UserModel.findAll(skip, limit);
+        const totalUsers = await UserModel.count();
+
 
         const userResponse = users.map(user => ({
             id: user.id,
@@ -22,7 +26,15 @@ class UserService {
             isActive: user.isActive,
         }));
 
-        return userResponse;
+        return {
+            data: userResponse,
+            meta: {
+                total_data: totalUsers,
+                current_page: page,
+                total_pages: Math.ceil(totalUsers / limit),
+                per_page: limit
+            }
+        };
     }
 
     static async getUserById(id) {
