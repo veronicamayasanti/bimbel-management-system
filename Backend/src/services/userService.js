@@ -10,11 +10,11 @@ import UserModel from "../models/userModel.js";
 import bcrypt from 'bcryptjs';
 
 class UserService {
-    static async getAllUsers(page = 1, limit = 10) {
+    static async getAllUsers(page = 1, limit = 10, search = "") {
         const skip = (page - 1) * limit;
 
-        const users = await UserModel.findAll(skip, limit);
-        const totalUsers = await UserModel.count();
+        const users = await UserModel.findAll(skip, limit, search);
+        const totalUsers = await UserModel.count(search);
 
 
         const userResponse = users.map(user => ({

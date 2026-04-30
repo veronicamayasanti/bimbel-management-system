@@ -24,6 +24,7 @@ class AuthController {
         }
     }
 
+
     static async loginAdmin(req, res, next) {
         try {
             const { username, password } = req.body;
@@ -40,6 +41,42 @@ class AuthController {
             }
         } catch (error) {
             console.error(error);
+            next(error);
+        }
+    }
+
+
+    // Tambahkan di bawah fungsi loginAdmin
+    static async forgotPassword(req, res, next) {
+        try {
+            const { email } = req.body;
+            if (!email) return res.status(400).json({ success: false, message: "Email wajib diisi" });
+
+            await AuthService.forgotPassword(email);
+
+            res.json({
+                success: true,
+                message: "Email reset password telah dikirim!"
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    static async resetPassword(req, res, next) {
+        try {
+            const { token } = req.params; // Ambil token dari URL
+            const { newPassword } = req.body; // Ambil password baru dari JSON body
+
+            if (!newPassword) return res.status(400).json({ success: false, message: "Password baru wajib diisi" });
+
+            await AuthService.resetPassword(token, newPassword);
+
+            res.json({
+                success: true,
+                message: "Password berhasil diubah. Silakan login dengan password baru."
+            });
+        } catch (error) {
             next(error);
         }
     }

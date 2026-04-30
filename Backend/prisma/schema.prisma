@@ -25,6 +25,8 @@ model User {
   password  String
   telp_no   String?
   address   String?
+  resetPasswordToken   String?
+  resetPasswordExpires DateTime?
 
   created_at DateTime @default(now())
   isActive   Boolean  @default(true)

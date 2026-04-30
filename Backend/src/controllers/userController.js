@@ -13,7 +13,9 @@ class UserController {
         try {
             const page = parseInt(req.query.page) || 1;
             const limit = parseInt(req.query.limit) || 10;
-            const result = await UserService.getAllUsers(page, limit);
+            const search = req.query.search || "";
+
+            const result = await UserService.getAllUsers(page, limit, search);
 
             res.json({
                 success: true,

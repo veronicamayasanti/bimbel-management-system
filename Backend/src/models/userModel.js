@@ -9,16 +9,33 @@
 import { prisma } from "../config/db.js";
 
 class UserModel {
-    static async findAll(skip = 0, take = 10) {
+    static async findAll(skip = 0, take = 10, search = "") {
+        const whereCondition = search ? {
+            OR: [
+                { full_name: { contains: search } },
+                { email: { contains: search } }
+            ]
+        } : {};
+
         return prisma.user.findMany({
+            where: whereCondition,
             skip: skip,
             take: take,
             orderBy: { created_at: 'desc' }
         });
     }
 
-    static async count() {
-        return prisma.user.count();
+    static async count(search = "") {
+        const whereCondition = search ? {
+            OR: [
+                { full_name: { contains: search } },
+                { email: { contains: search } }
+            ]
+        } : {};
+
+        return prisma.user.count({
+            where: whereCondition
+        });
     }
 
 
