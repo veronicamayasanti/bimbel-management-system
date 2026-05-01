@@ -58,15 +58,13 @@ class UserService {
     }
 
     static async updateUser(id, userData) {
+        // HAPUS SECARA PAKSA field password agar tidak bisa diubah lewat jalur ini
+        delete userData.password;
+
         // 1. Cek apakah user ada
         const userExist = await UserModel.findById(id);
         if (!userExist) return null;
 
-        // 2. Jika ada update password, hash dulu
-        if (userData.password) {
-            const salt = await bcrypt.genSalt(10);
-            userData.password = await bcrypt.hash(userData.password, salt);
-        }
 
         // 3. Lakukan update
         const updatedUser = await UserModel.update(id, userData);
@@ -74,6 +72,23 @@ class UserService {
         // 4. Hilangkan password dari hasil yang dikembalikan
         const { password, ...userWithoutPassword } = updatedUser;
         return userWithoutPassword;
+    }
+
+    static async changePassword(id, oldPassword, newPassword) {
+        const user = await UserModel.findById(id);
+        if (!user) throw new Error("User tidak ditemukan");
+
+        // Cek apakah password lama yang dimasukkan COCOK dengan di database
+        const isMatch = await bcrypt.compare(oldPassword, user.password);
+        if (!isMatch) throw new Error("Password lama salah!");
+
+        // Jika cocok, Hash password barunya
+        const salt = await bcrypt.genSalt(10);
+        const hashedNewPassword = await bcrypt.hash(newPassword, salt);
+
+        // Update password ke database
+        await UserModel.update(id, { password: hashedNewPassword });
+        return true;
     }
 
 

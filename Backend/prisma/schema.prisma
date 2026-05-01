@@ -27,6 +27,7 @@ model User {
   address   String?
   resetPasswordToken   String?
   resetPasswordExpires DateTime?
+  avatar String? @default("avatar_default.png")
 
   created_at DateTime @default(now())
   isActive   Boolean  @default(true)

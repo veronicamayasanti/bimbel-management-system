@@ -12,7 +12,7 @@ export const handleValidationErrors = (req, res, next) => {
     next();
 };
 
-// 2. Aturan untuk Membuat User Baru (Create User)
+
 export const validateCreateUser = [
     body('full_name')
         .trim()
@@ -31,4 +31,24 @@ export const validateCreateUser = [
         .notEmpty().withMessage('Nomor HP wajib diisi')
         .isNumeric().withMessage('Nomor HP hanya boleh berisi angka')
         .isLength({ min: 10, max: 15 }).withMessage('Nomor HP harus antara 10 hingga 15 digit'),
+];
+
+export const validateUpdateUser = [
+    // optional() artinya: Boleh tidak dikirim. Tapi kalau dikirim, harus dicek.
+    body('full_name')
+        .optional()
+        .trim()
+        .notEmpty().withMessage('Nama lengkap tidak boleh kosong')
+        .matches(/^[a-zA-Z\s]+$/).withMessage('Nama lengkap hanya boleh berisi huruf dan spasi'),
+
+    body('email')
+        .optional()
+        .isEmail().withMessage('Format email tidak valid'),
+
+    body('telp_no')
+        .optional()
+        .isNumeric().withMessage('Nomor HP hanya boleh berisi angka')
+        .isLength({ min: 10, max: 15 }).withMessage('Nomor HP harus antara 10 hingga 15 digit'),
+
+
 ];

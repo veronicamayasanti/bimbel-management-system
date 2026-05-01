@@ -60,6 +60,45 @@ class UserController {
         }
     }
 
+    // Fitur Get My Profile
+    static async getMe(req, res, next) {
+        try {
+            // Ambil ID otomatis dari Token (bukan dari URL)
+            const userId = req.user.id;
+            const user = await UserService.getUserById(userId);
+
+            if (!user) {
+                return res.status(404).json({ success: false, message: "User tidak ditemukan" });
+            }
+            res.json({ success: true, message: "Berhasil mengambil profil", user: user });
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    // Fitur Ganti Password
+    static async changePassword(req, res, next) {
+        try {
+            // Ambil ID dari Token untuk memastikan dia hanya bisa mengganti passwordnya sendiri
+            const userId = req.user.id;
+            const { old_password, new_password } = req.body;
+
+            if (!old_password || !new_password) {
+                return res.status(400).json({ success: false, message: "Password lama dan baru wajib diisi!" });
+            }
+
+            await UserService.changePassword(userId, old_password, new_password);
+
+            res.json({ success: true, message: "Password berhasil diubah!" });
+        } catch (error) {
+            // Tangkap pesan error khusus jika password lamanya salah
+            if (error.message === "Password lama salah!") {
+                return res.status(400).json({ success: false, message: error.message });
+            }
+            next(error);
+        }
+    }
+
     static async updateUser(req, res, next) {
         try {
             const loggedInUserId = req.user.id;
@@ -116,6 +155,32 @@ class UserController {
             next(error);
         }
     }
+
+    // Fitur Upload Foto Profil
+    static async uploadAvatar(req, res, next) {
+        try {
+            // Cek apakah ada file yang dikirim
+            if (!req.file) {
+                return res.status(400).json({ success: false, message: "Pilih gambar terlebih dahulu!" });
+            }
+
+            const userId = req.user.id;
+            const namaFileBaru = req.file.filename;
+
+            // Update kolom 'avatar' di database dengan nama file yang baru
+            // (Kita bisa pakai fungsi updateUser karena ia sudah otomatis aman)
+            await UserService.updateUser(userId, { avatar: namaFileBaru });
+
+            res.json({
+                success: true,
+                message: "Foto profil berhasil diperbarui!",
+                avatar_url: `http://localhost:3000/uploads/${namaFileBaru}`
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+
 }
 
 export default UserController;
