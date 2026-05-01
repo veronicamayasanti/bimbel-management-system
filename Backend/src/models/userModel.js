@@ -10,12 +10,16 @@ import { prisma } from "../config/db.js";
 
 class UserModel {
     static async findAll(skip = 0, take = 10, search = "") {
-        const whereCondition = search ? {
-            OR: [
-                { full_name: { contains: search } },
-                { email: { contains: search } }
-            ]
-        } : {};
+        // Tambahkan isActive: true di dalam sini
+        const whereCondition = {
+            isActive: true, // <--- HANYA TAMPILKAN YANG AKTIF
+            ...(search ? {
+                OR: [
+                    { full_name: { contains: search } },
+                    { email: { contains: search } }
+                ]
+            } : {})
+        };
 
         return prisma.user.findMany({
             where: whereCondition,
@@ -26,13 +30,16 @@ class UserModel {
     }
 
     static async count(search = "") {
-        const whereCondition = search ? {
-            OR: [
-                { full_name: { contains: search } },
-                { email: { contains: search } }
-            ]
-        } : {};
-
+        // Lakukan hal yang sama persis untuk fungsi count
+        const whereCondition = {
+            isActive: true, // <--- HANYA HITUNG YANG AKTIF
+            ...(search ? {
+                OR: [
+                    { full_name: { contains: search } },
+                    { email: { contains: search } }
+                ]
+            } : {})
+        };
         return prisma.user.count({
             where: whereCondition
         });
@@ -59,8 +66,10 @@ class UserModel {
     }
 
     static async delete(id) {
-        return prisma.user.delete({
+        // Soft Delete: Hanya mengubah status isActive menjadi false
+        return prisma.user.update({
             where: { id: id },
+            data: { isActive: false }
         });
     }
 

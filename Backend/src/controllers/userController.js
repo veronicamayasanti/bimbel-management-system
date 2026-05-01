@@ -60,9 +60,20 @@ class UserController {
         }
     }
 
-    static async updateUser(req, res) {
+    static async updateUser(req, res, next) {
         try {
-            const updatedUser = await UserService.updateUser(req.params.id, req.body);
+            const loggedInUserId = req.user.id;
+            const targetUserId = req.params.id;
+            const role = req.user.role;
+
+            if (role !== 'admin' && loggedInUserId !== targetUserId) {
+                return res.status(403).json({
+                    success: false,
+                    message: "Akses ditolak! Anda hanya bisa mengubah data akun Anda sendiri."
+                });
+            }
+
+            const updatedUser = await UserService.updateUser(loggedInUserId, req.body);
             if (updatedUser) {
                 res.json({
                     success: true,
@@ -77,13 +88,24 @@ class UserController {
             if (error.code === 'P2002') {
                 return res.status(409).json({ message: "Email or Phone Number already in use." });
             }
-            res.status(400).json({ message: error.message });
+            next(error);
         }
     }
 
-    static async deleteUser(req, res) {
+    static async deleteUser(req, res, next) {
         try {
-            const deletedUser = await UserService.deleteUser(req.params.id);
+            const loggedInUserId = req.user.id;
+            const targetUserId = req.params.id;
+            const role = req.user.role;
+
+            if (role !== 'admin' && loggedInUserId !== targetUserId) {
+                return res.status(403).json({
+                    success: false,
+                    message: "Akses ditolak! Anda hanya bisa menghapus akun Anda sendiri."
+                });
+            }
+
+            const deletedUser = await UserService.deleteUser(targetUserId);
             if (deletedUser) {
                 res.status(200).json({ message: "User deleted successfully" });
             } else {
