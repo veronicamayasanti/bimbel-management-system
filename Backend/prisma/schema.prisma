@@ -12,6 +12,7 @@ model Admin {
   username  String  @unique
   password  String
   full_name String?
+  avatar    String? @default("avatar_default.png")
 
   created_at DateTime @default(now())
   isActive   Boolean  @default(true)

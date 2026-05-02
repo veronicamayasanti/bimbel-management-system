@@ -7,6 +7,8 @@
  */
 
 import UserService from "../services/userService.js";
+import AdminModel from '../models/adminModel.js';
+
 
 class UserController {
     static async getAllUsers(req, res, next) {
@@ -63,24 +65,52 @@ class UserController {
     // Fitur Get My Profile
     static async getMe(req, res, next) {
         try {
-            // Ambil ID otomatis dari Token (bukan dari URL)
             const userId = req.user.id;
-            const user = await UserService.getUserById(userId);
+            const role = req.user.role; // Cek role dari token
+
+            let user;
+
+            // Jika yang login Admin, cari di AdminModel
+            if (role === 'admin') {
+                user = await AdminModel.findById(userId);
+                if (user) {
+                    user.role = 'admin';
+                }
+            } else {
+                // Jika User biasa, cari di UserService
+                user = await UserService.getUserById(userId);
+                if (user) user.role = 'user';
+            }
 
             if (!user) {
-                return res.status(404).json({ success: false, message: "User tidak ditemukan" });
+                return res.status(404).json({ success: false, message: "Profil tidak ditemukan" });
             }
-            res.json({ success: true, message: "Berhasil mengambil profil", user: user });
+
+            // Amankan password sebelum dikirim ke frontend
+            const { password, ...userSafeData } = user;
+
+            res.json({ success: true, message: "Berhasil mengambil profil", user: userSafeData });
         } catch (error) {
             next(error);
         }
     }
+
 
     // Fitur Ganti Password
     static async changePassword(req, res, next) {
         try {
             // Ambil ID dari Token untuk memastikan dia hanya bisa mengganti passwordnya sendiri
             const userId = req.user.id;
+            const role = req.user.role;
+
+
+            if (role === 'admin') {
+                return res.status(403).json({
+                    success: false,
+                    message: "Akses Ditolak: Admin tidak diizinkan mengganti password dari halaman ini."
+                });
+            }
+
             const { old_password, new_password } = req.body;
 
             if (!old_password || !new_password) {
@@ -112,7 +142,7 @@ class UserController {
                 });
             }
 
-            const updatedUser = await UserService.updateUser(loggedInUserId, req.body);
+            const updatedUser = await UserService.updateUser(targetUserId, req.body);
             if (updatedUser) {
                 res.json({
                     success: true,
@@ -165,11 +195,15 @@ class UserController {
             }
 
             const userId = req.user.id;
+            const role = req.user.role;
             const namaFileBaru = req.file.filename;
 
-            // Update kolom 'avatar' di database dengan nama file yang baru
-            // (Kita bisa pakai fungsi updateUser karena ia sudah otomatis aman)
-            await UserService.updateUser(userId, { avatar: namaFileBaru });
+            if (role === 'admin') {
+                await AdminModel.update(userId, { avatar: namaFileBaru });
+            } else {
+                // Jika User, simpan ke tabel User
+                await UserService.updateUser(userId, { avatar: namaFileBaru });
+            }
 
             res.json({
                 success: true,

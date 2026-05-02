@@ -12,6 +12,7 @@ import connectDB from './config/db.js';
 import userRoutes from './routes/userRoutes.js';
 import authRoutes from './routes/authRoutes.js';
 import errorMiddleware from './middleware/errorMiddleware.js';
+import cors from 'cors';
 
 dotenv.config();
 
@@ -23,9 +24,7 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
-
-
-
+app.use(cors());
 
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')));

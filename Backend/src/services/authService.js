@@ -10,7 +10,7 @@ import { prisma } from "../config/db.js"
 class AuthService {
     static async login(email, password) {
         const user = await UserModel.findByEmail(email);
-        if (!user) throw new Error("Invalid Email or Password");
+        if (!user) return null;
 
         const isPasswordMatch = await bcrypt.compare(password, user.password);
         if (!isPasswordMatch) return null;
