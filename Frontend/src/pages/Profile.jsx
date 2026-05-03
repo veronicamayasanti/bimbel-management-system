@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useOutletContext } from 'react-router-dom';
-import axiosInstance from '../api/axiosInstance';
+import axiosInstance, { API_BASE_URL } from '../api/axiosInstance';
 
 const Profile = () => {
     // Mengambil data user yang sudah di-fetch oleh DashboardLayout
@@ -95,7 +95,7 @@ const Profile = () => {
                 <div className="md:col-span-1 space-y-6">
                     <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center">
                         <img
-                            src={user.avatar ? `http://localhost:3000/uploads/${user.avatar}` : 'http://localhost:3000/uploads/avatar_default.png'}
+                            src={user.avatar ? `${API_BASE_URL}/uploads/${user.avatar}` : `${API_BASE_URL}/uploads/avatar_default.png`}
                             alt="Profile"
                             className="w-32 h-32 mx-auto rounded-full object-cover border-4 border-indigo-50 shadow-md mb-4"
                         />

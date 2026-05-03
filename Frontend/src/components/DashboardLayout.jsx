@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, Outlet, Link } from 'react-router-dom';
 import axiosInstance from '../api/axiosInstance';
+import { API_BASE_URL } from '../api/axiosInstance';
 import { Toaster } from 'react-hot-toast';
 
 
@@ -68,7 +69,7 @@ const DashboardLayout = () => {
                     <div className="flex items-center gap-3">
                         <span className="font-medium text-gray-700">{user.full_name}</span>
                         <img
-                            src={user.avatar ? `http://localhost:3000/uploads/${user.avatar}` : 'http://localhost:3000/uploads/avatar_default.png'}
+                            src={user.avatar ? `${API_BASE_URL}/uploads/${user.avatar}` : `${API_BASE_URL}/uploads/avatar_default.png`}
                             alt="Avatar"
                             className="w-10 h-10 rounded-full border-2 border-indigo-200 object-cover"
                         />

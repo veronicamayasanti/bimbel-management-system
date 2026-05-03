@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import axiosInstance from '../api/axiosInstance';
 
 const Login = () => {
@@ -80,7 +80,7 @@ const Login = () => {
                             required
                         />
                         <div className="flex justify-end mt-1">
-                            <a href="#" className="text-sm text-indigo-600 hover:text-indigo-800 font-medium">Lupa Password?</a>
+                            <Link to="/forgot-password" className="text-sm text-indigo-600 hover:text-indigo-800 font-medium">Lupa Password?</Link>
                         </div>
                     </div>
 

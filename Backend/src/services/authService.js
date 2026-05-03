@@ -59,7 +59,8 @@ class AuthService {
         });
         // Buat URL untuk diklik user (Nantinya URL ini mengarah ke Frontend Anda seperti React/Vue)
         // Untuk sekarang, kita arahkan ke API testing dulu
-        const resetUrl = `http://localhost:3000/reset-password?token=${resetToken}`;
+        const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+        const resetUrl = `${frontendUrl}/reset-password?token=${resetToken}`;
         const message = `Anda menerima email ini karena Anda (atau orang lain) meminta reset password.\n\nSilakan klik link berikut untuk mereset password Anda:\n\n${resetUrl}\n\nJika Anda tidak memintanya, abaikan email ini.`;
         try {
             await sendEmail({

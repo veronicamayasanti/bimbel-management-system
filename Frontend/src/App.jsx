@@ -5,6 +5,10 @@ import DashboardLayout from './components/DashboardLayout'
 import Profile from './pages/Profile'
 import DashboardHome from './pages/DashboardHome';
 import UserManagement from './pages/UserManagement';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
+import ProtectedRoute from './components/ProtectedRoute';
+
 
 
 
@@ -13,9 +17,11 @@ function App() {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
 
       {/* Rute Bersarang (Nested Routes) untuk Dashboard */}
-      <Route path="/dashboard" element={<DashboardLayout />}>
+      <Route path="/dashboard" element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
 
         {/* Konten Default saat baru masuk Dashboard */}
         <Route index element={<DashboardHome />} />

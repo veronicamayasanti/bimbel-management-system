@@ -34,12 +34,11 @@ class UserController {
         try {
             const user = await UserService.getUserById(id);
             if (user) {
-                res.json(user);
+                res.json({ success: true, message: "Berhasil mengambil data user", data: user });
             } else {
-                res.status(404).json({ message: "User not found" });
+                res.status(404).json({ success: false, message: "User tidak ditemukan" });
             }
         } catch (error) {
-            console.error(error);
             next(error);
         }
     }
@@ -176,12 +175,11 @@ class UserController {
 
             const deletedUser = await UserService.deleteUser(targetUserId);
             if (deletedUser) {
-                res.status(200).json({ message: "User deleted successfully" });
+                res.status(200).json({ success: true, message: "Pengguna berhasil dihapus" });
             } else {
-                res.status(404).json({ message: "User not found" });
+                res.status(404).json({ success: false, message: "User tidak ditemukan" });
             }
         } catch (error) {
-            console.error(error);
             next(error);
         }
     }
@@ -208,7 +206,7 @@ class UserController {
             res.json({
                 success: true,
                 message: "Foto profil berhasil diperbarui!",
-                avatar_url: `http://localhost:3000/uploads/${namaFileBaru}`
+                avatar_url: `${process.env.FRONTEND_URL ? process.env.FRONTEND_URL.replace(':5173', ':3000') : 'http://localhost:3000'}/uploads/${namaFileBaru}`
             });
         } catch (error) {
             next(error);

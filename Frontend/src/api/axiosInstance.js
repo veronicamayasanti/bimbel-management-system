@@ -1,7 +1,10 @@
 import axios from 'axios';
 
+// URL dasar Backend — cukup ubah di file .env saat deploy ke server sungguhan
+export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
 const axiosInstance = axios.create({
-    baseURL: 'http://localhost:3000/api',
+    baseURL: `${API_BASE_URL}/api`,
     timeout: 10000,
 });
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import axiosInstance from '../api/axiosInstance';
+import axiosInstance, { API_BASE_URL } from '../api/axiosInstance';
 import toast from 'react-hot-toast';
-import { Search, Plus, Edit2, Trash2, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Search, Plus, Edit2, Trash2 } from 'lucide-react';
 import UserFormModal from '../components/UserFormModal';
 import DeleteConfirmModal from '../components/DeleteConfirmModal';
 import Pagination from '../components/Pagination';
@@ -31,7 +31,7 @@ const UserManagement = () => {
     const fetchUsers = useCallback(async () => {
         try {
             setLoading(true);
-            const response = await axiosInstance.get(`/users?page=${page}&limit=3&search=${search}`);
+            const response = await axiosInstance.get(`/users?page=${page}&limit=5&search=${search}`);
             setUsers(response.data.data);
             // BUG FIX: Backend mengirim `.meta`, bukan `.pagination`
             setTotalPages(response.data.meta.total_pages);
@@ -142,16 +142,16 @@ const UserManagement = () => {
                                 <th className="py-4 px-6 font-semibold text-right">Aksi</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-gray-100">
-                            {loading ? (
+                        <tbody className={`divide-y divide-gray-100 transition-opacity duration-200 ${loading ? 'opacity-50 pointer-events-none' : 'opacity-100'}`}>
+                            {users.length === 0 && loading ? (
                                 <tr><td colSpan="4" className="py-10 text-center text-gray-500 animate-pulse">Memuat data...</td></tr>
-                            ) : users.length === 0 ? (
+                            ) : users.length === 0 && !loading ? (
                                 <tr><td colSpan="4" className="py-10 text-center text-gray-500">Tidak ada pengguna yang ditemukan.</td></tr>
                             ) : (
                                 users.map(user => (
                                     <tr key={user.id} className="hover:bg-gray-50/50">
                                         <td className="py-4 px-6 flex items-center gap-3">
-                                            <img src={user.avatar ? `http://localhost:3000/uploads/${user.avatar}` : 'http://localhost:3000/uploads/avatar_default.png'} alt="avatar" className="w-10 h-10 rounded-full object-cover border" />
+                                            <img src={user.avatar ? `${API_BASE_URL}/uploads/${user.avatar}` : `${API_BASE_URL}/uploads/avatar_default.png`} alt="avatar" className="w-10 h-10 rounded-full object-cover border" />
                                             <div>
                                                 <p className="font-bold text-gray-800">{user.full_name}</p>
                                                 <p className="text-xs text-gray-500">{new Date(user.created_at).toLocaleDateString('id-ID')}</p>

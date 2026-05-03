@@ -24,6 +24,8 @@ class UserService {
             telp_no: user.telp_no,
             address: user.address,
             isActive: user.isActive,
+            avatar: user.avatar,
+            created_at: user.created_at,
         }));
 
         return {

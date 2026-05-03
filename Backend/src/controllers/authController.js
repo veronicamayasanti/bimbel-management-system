@@ -68,7 +68,9 @@ class AuthController {
             const { token } = req.params; // Ambil token dari URL
             const { newPassword } = req.body; // Ambil password baru dari JSON body
 
-            if (!newPassword) return res.status(400).json({ success: false, message: "Password baru wajib diisi" });
+            if (!newPassword || newPassword.length < 6) {
+                return res.status(400).json({ success: false, message: "Password baru minimal 6 karakter" });
+            }
 
             await AuthService.resetPassword(token, newPassword);
 
