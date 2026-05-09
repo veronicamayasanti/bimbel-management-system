@@ -82,6 +82,7 @@ const Login = () => {
                         <div className="flex justify-end mt-1">
                             <Link to="/forgot-password" className="text-sm text-indigo-600 hover:text-indigo-800 font-medium">Lupa Password?</Link>
                         </div>
+
                     </div>
 
                     <button
@@ -91,7 +92,16 @@ const Login = () => {
                     >
                         {loading ? 'Memproses...' : 'Masuk Sekarang'}
                     </button>
+                    <div className="mt-8 text-center pt-6 border-t border-dashed border-gray-200">
+                        <p className="text-sm font-semibold text-gray-600">
+                            Belum punya akun?{' '}
+                            <Link to="/register" className="font-bold text-orange-500 hover:text-orange-600 transition-colors">
+                                Daftar Sekarang!
+                            </Link>
+                        </p>
+                    </div>
                 </form>
+
             </div>
         </div>
     );
