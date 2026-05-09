@@ -7,6 +7,7 @@ import DashboardHome from './pages/DashboardHome';
 import UserManagement from './pages/UserManagement';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
+import Register from './pages/Register';
 import ProtectedRoute from './components/ProtectedRoute';
 
 
@@ -17,6 +18,7 @@ function App() {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password" element={<ResetPassword />} />
 
