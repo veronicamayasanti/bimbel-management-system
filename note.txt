@@ -1,0 +1,3 @@
+Tahap 1 (Mudah & Tanpa Relasi Kompleks): Kita buat skema dan CRUD untuk Data Master dulu: Branch (Cabang), Program (Paket Belajar), dan Level (Tingkatan SD/TK). Ini sangat mudah karena tabelnya berdiri sendiri.
+Tahap 2 (Relasi Menengah): Kita buat skema Student (Siswa). Di tahap ini kita mulai menghubungkan Student dengan User (Orang Tua) dan Branch (Cabang).
+Tahap 3 (Relasi Penuh): Baru kita buat ClassSchedule (Jadwal) dan Enrollment (Pendaftaran Siswa ke Jadwal). 

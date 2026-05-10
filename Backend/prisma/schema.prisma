@@ -20,17 +20,40 @@ model Admin {
 }
 
 model User {
-  id        String  @id @default(uuid())
-  full_name String
-  email     String  @unique
-  password  String
-  telp_no   String?
-  address   String?
+  id                   String    @id @default(uuid())
+  full_name            String
+  email                String    @unique
+  password             String
+  telp_no              String?
+  address              String?
   resetPasswordToken   String?
   resetPasswordExpires DateTime?
-  avatar String? @default("avatar_default.png")
+  avatar               String?   @default("avatar_default.png")
 
   created_at DateTime @default(now())
   isActive   Boolean  @default(true)
   created_by String?
+}
+
+model Branch {
+  id         Int      @id @default(autoincrement())
+  name       String
+  address    String?  @db.Text
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Program {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?  @db.Text
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+}
+
+model Level {
+  id         Int      @id @default(autoincrement())
+  name       String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 }
