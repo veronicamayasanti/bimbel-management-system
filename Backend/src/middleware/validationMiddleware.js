@@ -52,3 +52,18 @@ export const validateUpdateUser = [
 
 
 ];
+
+// Validasi untuk Cabang (Branch)
+export const validateBranch = [
+    body('name')
+        .trim() // Otomatis menghapus spasi kosong di awal/akhir
+        .notEmpty().withMessage('Nama cabang tidak boleh kosong')
+        .matches(/^[a-zA-Z0-9\s]+$/).withMessage('Nama cabang hanya boleh berisi huruf, angka, dan spasi'),
+        // Kenapa ada angka? Siapa tahu namanya "Cabang 1"
+        
+    body('address')
+        .optional() // Boleh dikosongkan
+        .trim()
+        .notEmpty().withMessage('Alamat tidak boleh hanya berisi spasi kosong')
+];
+
