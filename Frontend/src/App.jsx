@@ -9,9 +9,8 @@ import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import Register from './pages/Register';
 import ProtectedRoute from './components/ProtectedRoute';
-
-
-
+import BranchManagement from './pages/BranchManagement';
+import ProgramManagement from './pages/ProgramManagement';
 
 function App() {
   return (
@@ -31,6 +30,8 @@ function App() {
         {/* Nanti kita buat halaman Profil beneran di sini */}
         <Route path="profile" element={<Profile />} />
         <Route path="users" element={<UserManagement />} />
+        <Route path="branches" element={<BranchManagement />} />
+        <Route path="programs" element={<ProgramManagement />} />
       </Route>
     </Routes>
   )

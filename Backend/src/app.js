@@ -14,6 +14,7 @@ import authRoutes from './routes/authRoutes.js';
 import errorMiddleware from './middleware/errorMiddleware.js';
 import cors from 'cors';
 import branchRoutes from './routes/branchRoutes.js';
+import programRoutes from './routes/programRoutes.js';
 
 
 dotenv.config();
@@ -36,6 +37,7 @@ app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')));
 app.use("/api/users", userRoutes)
 app.use("/api/auth", authRoutes);
 app.use("/api/branches", branchRoutes);
+app.use("/api/programs", programRoutes);
 
 app.use(errorMiddleware);
 

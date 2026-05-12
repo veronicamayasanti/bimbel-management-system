@@ -1,7 +1,33 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import axiosInstance from '../api/axiosInstance';
+import ProgramDetailModal from '../components/ProgramDetailModal';
 
 const Home = () => {
+    const [programs, setPrograms] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [selectedProgramId, setSelectedProgramId] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    useEffect(() => {
+        const fetchPrograms = async () => {
+            try {
+                const response = await axiosInstance.get('/programs');
+                setPrograms(response.data.data);
+            } catch (error) {
+                console.error("Gagal memuat program:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchPrograms();
+    }, []);
+
+    const openProgramDetail = (id) => {
+        setSelectedProgramId(id);
+        setIsModalOpen(true);
+    };
+
     return (
         <div className="bg-[#f8f9fa] text-[#191c1d] font-['Plus_Jakarta_Sans',sans-serif]">
             {/* Inject CSS custom for symbols and fonts - menggunakan pendekatan standar React */}
@@ -89,71 +115,39 @@ const Home = () => {
                 <section className="bg-[#f3f4f5] py-20 px-6">
                     <div className="max-w-7xl mx-auto">
                         <div className="text-center mb-16">
-                            <h2 className="font-lexend text-3xl font-bold text-[#001e40] mb-4">Pilihan Paket Kelas</h2>
-                            <p className="text-[#43474f]">Kurikulum yang dirancang khusus sesuai kebutuhan tumbuh kembang si kecil.</p>
+                            <h2 className="font-lexend text-3xl font-bold text-[#001e40] mb-4">Pilihan Program Belajar</h2>
+                            <p className="text-[#43474f]">Kurikulum yang dirancang khusus sesuai kebutuhan tumbuh kembang siswa.</p>
                         </div>
-                        <div className="grid md:grid-cols-3 gap-8">
-                            {/* Package 1: Calistung */}
-                            <div className="bg-white p-8 rounded-3xl border border-slate-100 card-soft-shadow group hover:-translate-y-2 transition-all duration-300">
-                                <div className="w-16 h-16 bg-[#d5e3ff] rounded-2xl flex items-center justify-center mb-8 group-hover:bg-[#001e40] group-hover:text-white transition-colors">
-                                    <span className="material-symbols-outlined text-3xl text-[#001e40] group-hover:text-white">menu_book</span>
-                                </div>
-                                <h3 className="font-lexend text-xl font-bold text-[#001e40] mb-3">Paket Calistung</h3>
-                                <p className="text-[#43474f] mb-6">Metode membaca, menulis, dan berhitung yang menyenangkan untuk persiapan masuk SD.</p>
-                                <ul className="space-y-4 mb-8">
-                                    <li className="flex items-center gap-3 font-semibold text-[#191c1d]">
-                                        <span className="material-symbols-outlined text-[#705d00] text-lg" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
-                                        Level TK A & TK B
-                                    </li>
-                                    <li className="flex items-center gap-3 font-semibold text-[#191c1d]">
-                                        <span className="material-symbols-outlined text-[#705d00] text-lg" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
-                                        Max 5 Siswa / Kelas
-                                    </li>
-                                </ul>
-                                <button className="w-full py-4 bg-[#e7e8e9] rounded-xl font-bold text-[#001e40] group-hover:bg-[#fcd400] transition-colors">Pilih Paket</button>
+                        
+                        {loading ? (
+                            <div className="flex justify-center items-center py-12">
+                                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#001e40]"></div>
                             </div>
-
-                            {/* Package 2: English */}
-                            <div className="bg-white p-8 rounded-3xl border border-slate-100 card-soft-shadow group hover:-translate-y-2 transition-all duration-300 relative overflow-hidden">
-                                <div className="absolute top-0 right-0 bg-[#ff6f44] px-6 py-2 rounded-bl-2xl text-white font-bold text-sm">Terpopuler</div>
-                                <div className="w-16 h-16 bg-[#d5e3ff] rounded-2xl flex items-center justify-center mb-8 group-hover:bg-[#001e40] group-hover:text-white transition-colors">
-                                    <span className="material-symbols-outlined text-3xl text-[#001e40] group-hover:text-white">language</span>
-                                </div>
-                                <h3 className="font-lexend text-xl font-bold text-[#001e40] mb-3">Paket English</h3>
-                                <p className="text-[#43474f] mb-6">Membangun kepercayaan diri berbicara bahasa Inggris sejak dini dengan native style.</p>
-                                <ul className="space-y-4 mb-8">
-                                    <li className="flex items-center gap-3 font-semibold text-[#191c1d]">
-                                        <span className="material-symbols-outlined text-[#705d00] text-lg" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
-                                        Speaking & Phonics
-                                    </li>
-                                    <li className="flex items-center gap-3 font-semibold text-[#191c1d]">
-                                        <span className="material-symbols-outlined text-[#705d00] text-lg" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
-                                        Interactive Games
-                                    </li>
-                                </ul>
-                                <button className="w-full py-4 bg-[#001e40] text-white rounded-xl font-bold btn-shadow transition-all">Pilih Paket</button>
+                        ) : programs.length === 0 ? (
+                            <div className="text-center py-12">
+                                <p className="text-gray-500">Belum ada program belajar yang tersedia saat ini.</p>
                             </div>
-
-                            {/* Package 3: SD */}
-                            <div className="bg-white p-8 rounded-3xl border border-slate-100 card-soft-shadow group hover:-translate-y-2 transition-all duration-300">
-                                <div className="w-16 h-16 bg-[#d5e3ff] rounded-2xl flex items-center justify-center mb-8 group-hover:bg-[#001e40] group-hover:text-white transition-colors">
-                                    <span className="material-symbols-outlined text-3xl text-[#001e40] group-hover:text-white">school</span>
-                                </div>
-                                <h3 className="font-lexend text-xl font-bold text-[#001e40] mb-3">Paket SD</h3>
-                                <p className="text-[#43474f] mb-6">Pendampingan tugas sekolah dan pemantapan materi kelas 1-6 SD untuk semua mata pelajaran.</p>
-                                <ul className="space-y-4 mb-8">
-                                    <li className="flex items-center gap-3 font-semibold text-[#191c1d]">
-                                        <span className="material-symbols-outlined text-[#705d00] text-lg" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
-                                        Persiapan Ujian
-                                    </li>
-                                    <li className="flex items-center gap-3 font-semibold text-[#191c1d]">
-                                        <span className="material-symbols-outlined text-[#705d00] text-lg" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
-                                        Free Modul Belajar
-                                    </li>
-                                </ul>
-                                <button className="w-full py-4 bg-[#e7e8e9] rounded-xl font-bold text-[#001e40] group-hover:bg-[#fcd400] transition-colors">Pilih Paket</button>
+                        ) : (
+                            <div className="grid md:grid-cols-3 gap-8">
+                                {programs.map((program, index) => (
+                                    <div key={program.id} className="bg-white p-8 rounded-3xl border border-slate-100 card-soft-shadow group hover:-translate-y-2 transition-all duration-300 flex flex-col h-full">
+                                        <div className="w-16 h-16 bg-[#d5e3ff] rounded-2xl flex items-center justify-center mb-8 group-hover:bg-[#001e40] group-hover:text-white transition-colors">
+                                            <span className="material-symbols-outlined text-3xl text-[#001e40] group-hover:text-white">menu_book</span>
+                                        </div>
+                                        <h3 className="font-lexend text-xl font-bold text-[#001e40] mb-3">{program.name}</h3>
+                                        <p className="text-[#43474f] mb-8 flex-grow line-clamp-3">
+                                            {program.description}
+                                        </p>
+                                        <button 
+                                            onClick={() => openProgramDetail(program.id)}
+                                            className="w-full mt-auto py-4 bg-[#e7e8e9] rounded-xl font-bold text-[#001e40] group-hover:bg-[#fcd400] transition-colors"
+                                        >
+                                            Detail Program
+                                        </button>
+                                    </div>
+                                ))}
                             </div>
-                        </div>
+                        )}
                     </div>
                 </section>
             </main>
@@ -181,6 +175,12 @@ const Home = () => {
                     </div>
                 </div>
             </footer>
+
+            <ProgramDetailModal 
+                isOpen={isModalOpen} 
+                onClose={() => setIsModalOpen(false)} 
+                programId={selectedProgramId} 
+            />
         </div>
     );
 };

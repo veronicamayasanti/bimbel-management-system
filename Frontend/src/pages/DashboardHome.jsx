@@ -4,6 +4,8 @@ import { useOutletContext } from 'react-router-dom';
 const DashboardHome = () => {
     const { user } = useOutletContext(); // Ambil data user yang sedang login
 
+
+
     // Membuat ucapan selamat Pagi/Siang/Malam otomatis sesuai jam komputer
     const hour = new Date().getHours();
     const greeting = hour < 12 ? 'Selamat Pagi' : hour < 18 ? 'Selamat Siang' : 'Selamat Malam';

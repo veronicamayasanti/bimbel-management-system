@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Ms Kiki Admin - Manajemen Cabang &amp; Program</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;700&amp;family=Plus+Jakarta+Sans:wght@400;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary": "#ffffff",
+                        "on-secondary-container": "#6e5c00",
+                        "on-secondary-fixed": "#221b00",
+                        "on-primary-container": "#799dd6",
+                        "inverse-surface": "#2e3132",
+                        "secondary-fixed-dim": "#e9c400",
+                        "tertiary-container": "#641700",
+                        "on-primary-fixed-variant": "#1f477b",
+                        "surface-container-low": "#f3f4f5",
+                        "surface-dim": "#d9dadb",
+                        "on-secondary-fixed-variant": "#544600",
+                        "primary": "#001e40",
+                        "on-error-container": "#93000a",
+                        "surface": "#f8f9fa",
+                        "outline": "#737780",
+                        "surface-bright": "#f8f9fa",
+                        "on-tertiary-fixed-variant": "#862200",
+                        "surface-tint": "#3a5f94",
+                        "on-surface-variant": "#43474f",
+                        "surface-container-highest": "#e1e3e4",
+                        "inverse-primary": "#a7c8ff",
+                        "error": "#ba1a1a",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary": "#705d00",
+                        "tertiary-fixed-dim": "#ffb5a0",
+                        "background": "#f8f9fa",
+                        "on-tertiary-fixed": "#3b0900",
+                        "surface-container": "#edeeef",
+                        "secondary-fixed": "#ffe16d",
+                        "on-background": "#191c1d",
+                        "on-primary-fixed": "#001b3c",
+                        "on-error": "#ffffff",
+                        "primary-fixed": "#d5e3ff",
+                        "inverse-on-surface": "#f0f1f2",
+                        "primary-container": "#003366",
+                        "tertiary-fixed": "#ffdbd1",
+                        "surface-container-high": "#e7e8e9",
+                        "outline-variant": "#c3c6d1",
+                        "primary-fixed-dim": "#a7c8ff",
+                        "on-primary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "secondary-container": "#fcd400",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-container": "#ff6f44",
+                        "tertiary": "#3f0b00",
+                        "surface-variant": "#e1e3e4",
+                        "on-surface": "#191c1d"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xl": "80px",
+                        "md": "24px",
+                        "margin": "32px",
+                        "xs": "4px",
+                        "sm": "12px",
+                        "lg": "48px",
+                        "base": "8px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Lexend"],
+                        "label-md": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Lexend"],
+                        "headline-sm": ["Lexend"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["32px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "label-md": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.02em", "fontWeight": "600"}],
+                        "headline-lg": ["40px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                        "headline-sm": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #f8f9fa;
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+<body class="font-body-md text-on-surface">
+<!-- SideNavBar (Authority: JSON) -->
+<aside class="flex flex-col h-screen fixed left-0 top-0 overflow-y-auto bg-primary dark:bg-primary docked left-0 h-full w-64 shadow-xl z-50">
+<div class="p-6 flex flex-col items-center gap-2 border-b border-on-primary/10">
+<div class="w-16 h-16 rounded-full bg-secondary-container flex items-center justify-center overflow-hidden shadow-inner">
+<img alt="Rumah Belajar Ms Kiki Logo" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzoKwTBLbYDEkd6WehMa1qvGEaWEqcGXb5smeaiu8D2PfW7uf7WQnBsp3oZFzBy5_X0nhEb6oo3UVNOmmCa-e8F6PyR71pgjO17z05U0jDuEOESfbvbKQqnUl3ODVdXhhYk9FMou6QRmzmTZigj9WjPplzEwxnXrGnqxyO4GHnMsZhD5elr3F8ffrcQN8A5484wmd0fSuRdOR6PcWtp_l962JCiT8btXBXKHlBzDEfMq9nEFmI48TZHUMcS128OhluMHSMe-zBJHQ"/>
+</div>
+<div class="text-center">
+<h1 class="font-headline-sm text-headline-sm font-bold text-secondary-container">Ms Kiki Admin</h1>
+<p class="font-label-md text-label-md text-on-primary/70">Tutoring Center</p>
+</div>
+</div>
+<nav class="flex-1 py-6 px-2">
+<div class="space-y-2">
+<a class="flex items-center gap-3 px-4 py-3 font-label-md text-label-md text-on-primary/70 hover:text-on-primary mx-2 my-1 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                    Dashboard
+                </a>
+<!-- Active Tab: Branches (Close match to requested intent) -->
+<a class="flex items-center gap-3 px-4 py-3 font-label-md text-label-md bg-secondary-container text-on-secondary-container rounded-lg mx-2 my-1 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="location_on" style="font-variation-settings: 'FILL' 1;">location_on</span>
+                    Branches
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 font-label-md text-label-md text-on-primary/70 hover:text-on-primary mx-2 my-1 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="school">school</span>
+                    Programs
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 font-label-md text-label-md text-on-primary/70 hover:text-on-primary mx-2 my-1 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_month">calendar_month</span>
+                    Schedules
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 font-label-md text-label-md text-on-primary/70 hover:text-on-primary mx-2 my-1 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+                    Students
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 font-label-md text-label-md text-on-primary/70 hover:text-on-primary mx-2 my-1 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="manage_accounts">manage_accounts</span>
+                    Users
+                </a>
+</div>
+<div class="mt-8 px-4">
+<button class="w-full bg-secondary-container text-on-secondary-container py-3 px-4 rounded-xl font-bold font-label-md text-label-md flex items-center justify-center gap-2 shadow-lg shadow-secondary-container/20 scale-95 active:scale-90 transition-transform">
+<span class="material-symbols-outlined">add_circle</span>
+                    Add New Enrollment
+                </button>
+</div>
+</nav>
+<div class="p-4 border-t border-on-primary/10">
+<a class="flex items-center gap-3 px-4 py-3 font-label-md text-label-md text-on-primary/70 hover:text-on-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+                Settings
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 font-label-md text-label-md text-on-primary/70 hover:text-on-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+                Logout
+            </a>
+</div>
+</aside>
+<!-- Main Content Shell -->
+<main class="ml-64 min-h-screen">
+<!-- TopAppBar (Authority: JSON) -->
+<header class="flex justify-between items-center h-16 px-gutter ml-0 bg-surface dark:bg-surface-container docked top-0 full-width border-b border-outline-variant sticky top-0 z-40">
+<div class="flex items-center gap-6">
+<span class="font-headline-sm text-headline-sm font-bold text-primary dark:text-primary-fixed">Rumah Belajar Ms Kiki</span>
+<div class="hidden md:flex items-center gap-6">
+<a class="font-label-md text-label-md text-primary font-bold border-b-2 border-primary pb-1" href="#">Branches</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors cursor-pointer" href="#">Reports</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors cursor-pointer" href="#">Support</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-on-surface-variant hover:text-primary transition-opacity opacity-80 hover:opacity-100">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-primary transition-opacity opacity-80 hover:opacity-100">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+</button>
+<div class="h-8 w-[1px] bg-outline-variant mx-2"></div>
+<div class="flex items-center gap-3">
+<div class="text-right">
+<p class="font-label-md text-label-md text-on-surface">Admin Utama</p>
+<p class="text-[10px] text-on-surface-variant">Super Admin</p>
+</div>
+<img alt="Admin Profile Picture" class="w-10 h-10 rounded-full border-2 border-secondary-container" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCrxQRYOD8ctBqgEO9ery39Hn4a4glq2v8CBxlLmeE0U4bRqmMJvO1gBD7tyMTChpoXsZd748FUcNMpwkXtJHCUQg9EMzD03jLtZeinsRzrNQRhxckF69JtALL-24orODEmPlW6d2DNMfSzrs2zcP251DS_vKthulg9myl6PYPjpxkfGQtTCUGHGrisOi-zc7eGKfaddDM_IcewnEBh8XqTyix-51SunU3wXH9wnGwVZwLuKQSuQTAEDx7VMTsECpLGh3gO4PHlSUU"/>
+</div>
+</div>
+</header>
+<!-- Page Canvas -->
+<div class="p-margin">
+<!-- Page Header -->
+<div class="flex justify-between items-end mb-lg">
+<div>
+<h2 class="font-headline-md text-headline-md text-primary mb-2">Manajemen Pusat Pembelajaran</h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-2xl">Kelola lokasi operasional cabang dan program edukasi unggulan Rumah Belajar Ms Kiki dalam satu dashboard terpadu.</p>
+</div>
+<div class="flex gap-4">
+<button class="flex items-center gap-2 bg-primary text-on-primary px-6 py-3 rounded-xl font-bold transition-all hover:shadow-xl hover:-translate-y-1 shadow-primary/20">
+<span class="material-symbols-outlined">add_location_alt</span>
+                        Tambah Cabang
+                    </button>
+</div>
+</div>
+<div class="bento-grid">
+<!-- Section 1: Daftar Cabang (Bento Large Item) -->
+<section class="col-span-12 lg:col-span-8 bg-white rounded-[16px] shadow-sm border border-outline-variant overflow-hidden">
+<div class="p-6 border-b border-outline-variant flex justify-between items-center bg-surface-container-low">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">apartment</span>
+<h3 class="font-headline-sm text-headline-sm text-primary">Daftar Cabang</h3>
+</div>
+<div class="flex items-center gap-2 px-3 py-1 bg-white rounded-lg border border-outline-variant">
+<span class="material-symbols-outlined text-sm text-outline">search</span>
+<input class="border-none focus:ring-0 text-sm bg-transparent w-48" placeholder="Cari cabang..." type="text"/>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-surface-container-high border-b border-outline-variant">
+<tr>
+<th class="px-6 py-4 font-label-md text-label-md text-on-surface">Nama Cabang</th>
+<th class="px-6 py-4 font-label-md text-label-md text-on-surface">Alamat Lengkap</th>
+<th class="px-6 py-4 font-label-md text-label-md text-on-surface">Kapasitas</th>
+<th class="px-6 py-4 font-label-md text-label-md text-on-surface">Aksi</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-sm text-on-primary-container">location_on</span>
+</div>
+<span class="font-bold text-on-surface">Cabang Madani</span>
+</div>
+</td>
+<td class="px-6 py-5 text-on-surface-variant font-body-md">Jl. Madani No. 45, Kompleks Pendidikan Utama, Jakarta</td>
+<td class="px-6 py-5">
+<span class="px-3 py-1 rounded-full bg-primary-fixed text-on-primary-fixed font-label-md text-[12px]">120 Siswa</span>
+</td>
+<td class="px-6 py-5">
+<button class="text-primary hover:bg-primary/10 p-2 rounded-full transition-colors">
+<span class="material-symbols-outlined">edit</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-sm text-on-primary-container">location_on</span>
+</div>
+<span class="font-bold text-on-surface">Cabang Tenjo</span>
+</div>
+</td>
+<td class="px-6 py-5 text-on-surface-variant font-body-md">Blok C2 No. 12, Perumahan Tenjo City, Tangerang</td>
+<td class="px-6 py-5">
+<span class="px-3 py-1 rounded-full bg-primary-fixed text-on-primary-fixed font-label-md text-[12px]">85 Siswa</span>
+</td>
+<td class="px-6 py-5">
+<button class="text-primary hover:bg-primary/10 p-2 rounded-full transition-colors">
+<span class="material-symbols-outlined">edit</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-sm text-on-primary-container">location_on</span>
+</div>
+<span class="font-bold text-on-surface">Cabang Parung</span>
+</div>
+</td>
+<td class="px-6 py-5 text-on-surface-variant font-body-md">Ruko Green Parung, Lantai 2, Bogor Raya</td>
+<td class="px-6 py-5">
+<span class="px-3 py-1 rounded-full bg-primary-fixed text-on-primary-fixed font-label-md text-[12px]">60 Siswa</span>
+</td>
+<td class="px-6 py-5">
+<button class="text-primary hover:bg-primary/10 p-2 rounded-full transition-colors">
+<span class="material-symbols-outlined">edit</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- Section 2: Quick Stats / Visual Sidebar (Bento Medium) -->
+<section class="col-span-12 lg:col-span-4 flex flex-col gap-6">
+<div class="relative rounded-[16px] overflow-hidden aspect-video shadow-xl group">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="A bright, airy classroom in a modern tutoring center with colorful educational posters, wooden tables, and children's activity stations. The lighting is natural and high-key, creating a warm, professional academic atmosphere that reflects a high-end educational institution's clean and organized style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB8QJIYtcmqvhjQDoZN7yXkMS0TYLc3wqWSpTp-5i7fkOvU86-0LCwUfpG8Gx7YIIR8iqwGpFmP1GE3xMl3GiE82Mzz8_4z55EkqIJYzo4AnwxcDI7LARX0zTlywS760-BNxURFiCESd0ISlth_uZL-9EZyroIGn7y89IfKHtlMG2U49LAIfNOH2LOyDKaxp2IY0msbkLuP4Mc45WNK6T4cxCc7Exq-fkf8zo-uD5ek50v9f0HXsqXNSXT9Tzy8Alu8phlWwEtxiCw"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent flex flex-col justify-end p-6">
+<h4 class="text-white font-bold text-xl">Statistik Cabang</h4>
+<p class="text-white/80 text-sm">3 Cabang Aktif | 265 Siswa Terdaftar</p>
+</div>
+</div>
+<div class="bg-secondary-container rounded-[16px] p-6 shadow-lg shadow-secondary-container/10 border border-secondary/20">
+<h4 class="font-headline-sm text-on-secondary-container mb-4">Informasi Penting</h4>
+<ul class="space-y-4">
+<li class="flex gap-3">
+<span class="material-symbols-outlined text-on-secondary-container">campaign</span>
+<p class="text-sm text-on-secondary-container/80">Pendaftaran kelas baru untuk Semester Genap akan dibuka pekan depan di semua cabang.</p>
+</li>
+<li class="flex gap-3">
+<span class="material-symbols-outlined text-on-secondary-container">priority_high</span>
+<p class="text-sm text-on-secondary-container/80">Cabang Madani membutuhkan tambahan 1 tutor untuk program Calistung sore.</p>
+</li>
+</ul>
+</div>
+</section>
+<!-- Section 3: Program Belajar (Asymmetric Grid) -->
+<section class="col-span-12 mt-6">
+<div class="flex justify-between items-center mb-8">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-3xl">menu_book</span>
+<h3 class="font-headline-md text-headline-md text-primary">Program Belajar</h3>
+</div>
+<button class="bg-secondary text-on-secondary px-6 py-3 rounded-xl font-bold transition-all hover:bg-secondary/90 shadow-lg shadow-secondary/20 flex items-center gap-2">
+<span class="material-symbols-outlined">library_add</span>
+                            Tambah Program
+                        </button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<!-- Program Card: English -->
+<div class="glass-card rounded-[24px] p-8 border-2 border-primary/5 hover:border-primary/20 transition-all flex flex-col relative overflow-hidden group">
+<div class="absolute -right-8 -top-8 w-24 h-24 bg-primary/5 rounded-full transition-transform duration-500 group-hover:scale-150"></div>
+<div class="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-white text-3xl" style="font-variation-settings: 'FILL' 1;">translate</span>
+</div>
+<h4 class="font-headline-sm text-headline-sm text-primary mb-3">English Kids</h4>
+<p class="text-on-surface-variant font-body-md mb-8 flex-1">Program bahasa Inggris interaktif yang fokus pada kepercayaan diri berbicara dan kosakata dasar melalui permainan dan lagu.</p>
+<div class="flex items-center justify-between pt-6 border-t border-outline-variant">
+<span class="px-4 py-1 bg-secondary-container text-on-secondary-container rounded-full text-[12px] font-bold">Usia 5-12 Tahun</span>
+<button class="text-primary font-bold flex items-center gap-1 group/btn">
+                                    Detail Program
+                                    <span class="material-symbols-outlined text-sm transition-transform group-hover/btn:translate-x-1">arrow_forward_ios</span>
+</button>
+</div>
+</div>
+<!-- Program Card: Calistung -->
+<div class="glass-card rounded-[24px] p-8 border-2 border-secondary/5 hover:border-secondary/20 transition-all flex flex-col relative overflow-hidden group">
+<div class="absolute -right-8 -top-8 w-24 h-24 bg-secondary/5 rounded-full transition-transform duration-500 group-hover:scale-150"></div>
+<div class="w-16 h-16 bg-secondary rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-secondary/20">
+<span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings: 'FILL' 1;">history_edu</span>
+</div>
+<h4 class="font-headline-sm text-headline-sm text-primary mb-3">Calistung</h4>
+<p class="text-on-surface-variant font-body-md mb-8 flex-1">Metode membaca, menulis, dan berhitung yang menyenangkan khusus untuk persiapan masuk SD (Sekolah Dasar) tanpa tekanan.</p>
+<div class="flex items-center justify-between pt-6 border-t border-outline-variant">
+<span class="px-4 py-1 bg-secondary-container text-on-secondary-container rounded-full text-[12px] font-bold">Usia 4-6 Tahun</span>
+<button class="text-primary font-bold flex items-center gap-1 group/btn">
+                                    Detail Program
+                                    <span class="material-symbols-outlined text-sm transition-transform group-hover/btn:translate-x-1">arrow_forward_ios</span>
+</button>
+</div>
+</div>
+<!-- Program Card: Science Explorer -->
+<div class="glass-card rounded-[24px] p-8 border-2 border-tertiary-container/5 hover:border-tertiary-container/20 transition-all flex flex-col relative overflow-hidden group">
+<div class="absolute -right-8 -top-8 w-24 h-24 bg-tertiary-container/5 rounded-full transition-transform duration-500 group-hover:scale-150"></div>
+<div class="w-16 h-16 bg-tertiary-container rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-tertiary-container/20">
+<span class="material-symbols-outlined text-white text-3xl" style="font-variation-settings: 'FILL' 1;">biotech</span>
+</div>
+<h4 class="font-headline-sm text-headline-sm text-primary mb-3">Science Explorer</h4>
+<p class="text-on-surface-variant font-body-md mb-8 flex-1">Mengajak anak bereksperimen dan mengenal fenomena alam dengan cara yang seru dan aman di laboratorium mini kami.</p>
+<div class="flex items-center justify-between pt-6 border-t border-outline-variant">
+<span class="px-4 py-1 bg-secondary-container text-on-secondary-container rounded-full text-[12px] font-bold">Usia 7-15 Tahun</span>
+<button class="text-primary font-bold flex items-center gap-1 group/btn">
+                                    Detail Program
+                                    <span class="material-symbols-outlined text-sm transition-transform group-hover/btn:translate-x-1">arrow_forward_ios</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+</div>
+</div>
+<!-- Footer Note -->
+<footer class="mt-lg p-margin text-center text-on-surface-variant/60 border-t border-outline-variant">
+<p class="font-label-md text-label-md">© 2024 Rumah Belajar Ms Kiki. Professional Education for Future Leaders.</p>
+</footer>
+</main>
+<!-- Contextual FAB (Authority: JSON/Manual Rule) -->
+<button class="fixed bottom-8 right-8 w-16 h-16 bg-primary text-on-primary rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-50 group">
+<span class="material-symbols-outlined text-3xl">support_agent</span>
+<span class="absolute right-20 bg-primary text-white px-4 py-2 rounded-lg text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">Hubungi Support</span>
+</button>
+</body></html>
