@@ -141,15 +141,14 @@ const BranchManagement = () => {
                                 <tr>
                                     <th className="px-6 py-4 text-sm font-semibold text-gray-700">Nama Cabang</th>
                                     <th className="px-6 py-4 text-sm font-semibold text-gray-700">Alamat Lengkap</th>
-                                    <th className="px-6 py-4 text-sm font-semibold text-gray-700">Kapasitas</th>
                                     <th className="px-6 py-4 text-sm font-semibold text-gray-700 text-right">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody className={`divide-y divide-gray-100 transition-opacity duration-200 ${loading ? 'opacity-50 pointer-events-none' : 'opacity-100'}`}>
                                 {branches.length === 0 && loading ? (
-                                    <tr><td colSpan="4" className="py-10 text-center text-gray-500 animate-pulse">Memuat data...</td></tr>
+                                    <tr><td colSpan="3" className="py-10 text-center text-gray-500 animate-pulse">Memuat data...</td></tr>
                                 ) : branches.length === 0 && !loading ? (
-                                    <tr><td colSpan="4" className="py-10 text-center text-gray-500">Tidak ada cabang yang ditemukan.</td></tr>
+                                    <tr><td colSpan="3" className="py-10 text-center text-gray-500">Tidak ada cabang yang ditemukan.</td></tr>
                                 ) : (
                                     branches.map(branch => (
                                         <tr key={branch.id} className="hover:bg-gray-50/50 transition-colors group">
@@ -162,11 +161,6 @@ const BranchManagement = () => {
                                                 </div>
                                             </td>
                                             <td className="px-6 py-5 text-gray-500 text-sm">{branch.address || '-'}</td>
-                                            <td className="px-6 py-5">
-                                                <span className="px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-semibold border border-indigo-100">
-                                                    N/A
-                                                </span>
-                                            </td>
                                             <td className="px-6 py-5">
                                                 <div className="flex items-center justify-end gap-2">
                                                     <button onClick={() => handleOpenEditModal(branch)} className="p-2 text-indigo-600 hover:bg-indigo-50 rounded-full transition-colors"><Edit2 size={18} /></button>
@@ -184,7 +178,7 @@ const BranchManagement = () => {
                 {/* Section 2: Quick Stats / Visual Sidebar (Bento Medium) */}
                 <section className="col-span-12 lg:col-span-4 flex flex-col gap-6">
                     <div className="relative rounded-2xl overflow-hidden aspect-video shadow-lg group">
-                        <img alt="Classroom" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB8QJIYtcmqvhjQDoZN7yXkMS0TYLc3wqWSpTp-5i7fkOvU86-0LCwUfpG8Gx7YIIR8iqwGpFmP1GE3xMl3GiE82Mzz8_4z55EkqIJYzo4AnwxcDI7LARX0zTlywS760-BNxURFiCESd0ISlth_uZL-9EZyroIGn7y89IfKHtlMG2U49LAIfNOH2LOyDKaxp2IY0msbkLuP4Mc45WNK6T4cxCc7Exq-fkf8zo-uD5ek50v9f0HXsqXNSXT9Tzy8Alu8phlWwEtxiCw" />
+                        <img alt="Classroom" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=600&auto=format&fit=crop" />
                         <div className="absolute inset-0 bg-gradient-to-t from-indigo-900/90 to-transparent flex flex-col justify-end p-6">
                             <h4 className="text-white font-bold text-xl">Statistik Cabang</h4>
                             <p className="text-white/80 text-sm mt-1">{branches.length} Cabang Terdaftar</p>

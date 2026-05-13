@@ -14,9 +14,10 @@ model Admin {
   full_name String?
   avatar    String? @default("avatar_default.png")
 
-  created_at DateTime @default(now())
-  isActive   Boolean  @default(true)
-  created_by String?
+  created_at  DateTime      @default(now())
+  isActive    Boolean       @default(true)
+  created_by  String?
+  Transaction Transaction[]
 }
 
 model User {
@@ -33,22 +34,28 @@ model User {
   created_at DateTime @default(now())
   isActive   Boolean  @default(true)
   created_by String?
+
+  students Student[]
 }
 
 model Branch {
   id         Int      @id @default(autoincrement())
   name       String
-  address    String  @db.Text
+  address    String   @db.Text
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+
+  students Student[]
 }
 
 model Program {
   id          Int      @id @default(autoincrement())
   name        String
-  description String  @db.Text
+  description String   @db.Text
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
+
+  packages ProgramPackage[]
 }
 
 model Level {
@@ -56,4 +63,99 @@ model Level {
   name       String
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+
+  students Student[]
+}
+
+model Student {
+  id         Int    @id @default(autoincrement())
+  parentId   String
+  branchId   Int
+  levelId    Int
+  fullName   String
+  schoolName String
+
+  // Relations
+  parent User   @relation(fields: [parentId], references: [id], onDelete: Cascade)
+  branch Branch @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  level  Level  @relation(fields: [levelId], references: [id], onDelete: Cascade)
+
+  transactions    Transaction[]
+  studentPackages StudentPackage[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+enum PaymentMethod {
+  TRANSFER
+  CASH
+}
+
+enum PaymentStatus {
+  PENDING
+  VERIFIED
+  REJECTED
+}
+
+enum PackageStatus {
+  ACTIVE
+  EXPIRED
+}
+
+model ProgramPackage {
+  id            Int      @id @default(autoincrement())
+  programId     Int
+  name          String
+  totalMeetings Int
+  price         Decimal  @db.Decimal(10, 2)
+  isActive      Boolean  @default(true)
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+
+  program Program @relation(fields: [programId], references: [id], onDelete: Cascade)
+
+  transactions    Transaction[]
+  studentPackages StudentPackage[]
+}
+
+model Transaction {
+  id               String        @id @default(uuid())
+  studentId        Int
+  programPackageId Int
+  amount           Decimal       @db.Decimal(10, 2)
+  paymentMethod    PaymentMethod
+  paymentProof     String?
+  paymentStatus    PaymentStatus @default(PENDING)
+  notes            String?       @db.Text
+
+  verifiedById String?
+  verifiedAt   DateTime?
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  student        Student        @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  programPackage ProgramPackage @relation(fields: [programPackageId], references: [id])
+  verifiedBy     Admin?         @relation(fields: [verifiedById], references: [id])
+
+  studentPackage StudentPackage?
+}
+
+model StudentPackage {
+  id               Int    @id @default(autoincrement())
+  studentId        Int
+  programPackageId Int
+  transactionId    String @unique
+
+  totalMeetings     Int
+  remainingMeetings Int
+  status            PackageStatus @default(ACTIVE)
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  student        Student        @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  programPackage ProgramPackage @relation(fields: [programPackageId], references: [id])
+  transaction    Transaction    @relation(fields: [transactionId], references: [id], onDelete: Cascade)
 }

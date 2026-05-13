@@ -40,10 +40,6 @@ class BranchController {
 
             const { name, address } = req.body;
             
-            if (!name) {
-                return res.status(400).json({ success: false, message: "Nama cabang wajib diisi." });
-            }
-
             const newBranch = await BranchService.createBranch({ name, address });
             res.status(201).json({ success: true, message: "Cabang berhasil ditambahkan", data: newBranch });
         } catch (error) {

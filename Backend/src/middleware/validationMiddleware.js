@@ -77,3 +77,31 @@ export const validateProgram = [
         .trim()
         .notEmpty().withMessage('Deskripsi program tidak boleh kosong')
 ];
+
+// Validasi untuk Level
+export const validateLevel = [
+    body('name')
+        .trim()
+        .notEmpty().withMessage('Nama level tidak boleh kosong atau hanya berisi spasi')
+        .matches(/[a-zA-Z]/).withMessage('Nama level harus mengandung huruf')
+];
+
+// Validasi untuk Student
+export const validateStudent = [
+    body('branchId')
+        .notEmpty().withMessage('Cabang (Branch) wajib dipilih')
+        .isInt().withMessage('ID Cabang harus berupa angka'),
+
+    body('levelId')
+        .notEmpty().withMessage('Tingkat Kelas (Level) wajib dipilih')
+        .isInt().withMessage('ID Level harus berupa angka'),
+
+    body('fullName')
+        .trim()
+        .notEmpty().withMessage('Nama lengkap siswa tidak boleh kosong')
+        .matches(/^[a-zA-Z\s]+$/).withMessage('Nama lengkap hanya boleh berisi huruf dan spasi'),
+
+    body('schoolName')
+        .trim()
+        .notEmpty().withMessage('Nama sekolah tidak boleh kosong')
+];

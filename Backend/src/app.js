@@ -15,6 +15,10 @@ import errorMiddleware from './middleware/errorMiddleware.js';
 import cors from 'cors';
 import branchRoutes from './routes/branchRoutes.js';
 import programRoutes from './routes/programRoutes.js';
+import programPackageRoutes from './routes/programPackageRoutes.js';
+import levelRoutes from './routes/levelRoutes.js';
+import studentRoutes from './routes/studentRoutes.js';
+import transactionRoutes from './routes/transactionRoutes.js';
 
 
 dotenv.config();
@@ -38,6 +42,10 @@ app.use("/api/users", userRoutes)
 app.use("/api/auth", authRoutes);
 app.use("/api/branches", branchRoutes);
 app.use("/api/programs", programRoutes);
+app.use("/api/program-packages", programPackageRoutes);
+app.use("/api/levels", levelRoutes);
+app.use("/api/students", studentRoutes);
+app.use("/api/transactions", transactionRoutes);
 
 app.use(errorMiddleware);
 

@@ -2,10 +2,11 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import axiosInstance from '../api/axiosInstance';
 import toast from 'react-hot-toast';
-import { BookOpen, Plus, Edit2, Trash2, Library, Eye } from 'lucide-react';
+import { BookOpen, Plus, Edit2, Trash2, Library, Eye, Package } from 'lucide-react';
 import ProgramFormModal from '../components/ProgramFormModal';
 import DeleteConfirmModal from '../components/DeleteConfirmModal';
 import ProgramDetailModal from '../components/ProgramDetailModal';
+import ProgramPackageManagementModal from '../components/ProgramPackageManagementModal';
 
 const ProgramManagement = () => {
     const { user } = useOutletContext();
@@ -28,6 +29,10 @@ const ProgramManagement = () => {
     // Detail Modal states (For Regular Users)
     const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
     const [selectedDetailId, setSelectedDetailId] = useState(null);
+
+    // Paket modal state (Admin)
+    const [isPackageModalOpen, setIsPackageModalOpen] = useState(false);
+    const [selectedPackageProgram, setSelectedPackageProgram] = useState({ id: null, name: '' });
 
     const fetchPrograms = useCallback(async () => {
         try {
@@ -109,6 +114,11 @@ const ProgramManagement = () => {
         setIsDetailModalOpen(true);
     };
 
+    const handleOpenPackageModal = (program) => {
+        setSelectedPackageProgram({ id: program.id, name: program.name });
+        setIsPackageModalOpen(true);
+    };
+
     // Helper for dynamic colors
     const getCardStyle = (index) => {
         const styles = [
@@ -182,6 +192,13 @@ const ProgramManagement = () => {
                                             {user?.role === 'admin' ? (
                                                 <>
                                                     <button 
+                                                        onClick={() => handleOpenPackageModal(program)}
+                                                        className="p-2 text-amber-600 hover:bg-amber-50 rounded-full transition-colors"
+                                                        title="Kelola Paket"
+                                                    >
+                                                        <Package size={18} />
+                                                    </button>
+                                                    <button 
                                                         onClick={() => handleOpenEditModal(program)} 
                                                         className="p-2 text-indigo-600 hover:bg-indigo-50 rounded-full transition-colors"
                                                         title="Edit Program"
@@ -238,6 +255,13 @@ const ProgramManagement = () => {
                 isOpen={isDetailModalOpen} 
                 onClose={() => setIsDetailModalOpen(false)} 
                 programId={selectedDetailId} 
+            />
+
+            <ProgramPackageManagementModal
+                isOpen={isPackageModalOpen}
+                onClose={() => setIsPackageModalOpen(false)}
+                programId={selectedPackageProgram.id}
+                programName={selectedPackageProgram.name}
             />
         </div>
     );

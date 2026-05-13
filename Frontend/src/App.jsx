@@ -11,6 +11,9 @@ import Register from './pages/Register';
 import ProtectedRoute from './components/ProtectedRoute';
 import BranchManagement from './pages/BranchManagement';
 import ProgramManagement from './pages/ProgramManagement';
+import LevelManagement from './pages/LevelManagement';
+import StudentManagement from './pages/StudentManagement';
+import TransactionManagement from './pages/TransactionManagement';
 
 function App() {
   return (
@@ -32,6 +35,9 @@ function App() {
         <Route path="users" element={<UserManagement />} />
         <Route path="branches" element={<BranchManagement />} />
         <Route path="programs" element={<ProgramManagement />} />
+        <Route path="levels" element={<LevelManagement />} />
+        <Route path="students" element={<StudentManagement />} />
+        <Route path="transactions" element={<TransactionManagement />} />
       </Route>
     </Routes>
   )

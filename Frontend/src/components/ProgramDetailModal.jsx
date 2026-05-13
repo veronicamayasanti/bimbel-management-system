@@ -10,6 +10,7 @@ const ProgramDetailModal = ({ isOpen, onClose, programId }) => {
     useEffect(() => {
         if (isOpen && programId) {
             const fetchProgramDetail = async () => {
+                setProgram(null); // Reset agar data lama tidak tampil sebentar
                 setLoading(true);
                 setError('');
                 try {

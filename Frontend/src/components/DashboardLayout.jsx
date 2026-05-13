@@ -44,6 +44,8 @@ const DashboardLayout = () => {
                 <nav className="flex-1 p-4 space-y-2">
                     <Link to="/dashboard" className="block px-4 py-3 rounded-lg hover:bg-indigo-800 transition-colors">🏠 Beranda</Link>
                     <Link to="/dashboard/profile" className="block px-4 py-3 rounded-lg hover:bg-indigo-800 transition-colors">👤 Profil Saya</Link>
+                    <Link to="/dashboard/students" className="block px-4 py-3 rounded-lg hover:bg-indigo-800 transition-colors">👨‍🎓 Data Anak / Siswa</Link>
+                    <Link to="/dashboard/transactions" className="block px-4 py-3 rounded-lg hover:bg-indigo-800 transition-colors">🧾 Transaksi</Link>
                     <Link to="/dashboard/programs" className="block px-4 py-3 rounded-lg hover:bg-indigo-800 transition-colors">📚 Program</Link>
 
                     {/* Menu Manajemen User HANYA muncul jika yang login adalah admin */}
@@ -51,6 +53,7 @@ const DashboardLayout = () => {
                         <>
                             <Link to="/dashboard/users" className="block px-4 py-3 rounded-lg hover:bg-indigo-800 transition-colors">👥 Manajemen Akun</Link>
                             <Link to="/dashboard/branches" className="block px-4 py-3 rounded-lg hover:bg-indigo-800 transition-colors">📍 Cabang</Link>
+                            <Link to="/dashboard/levels" className="block px-4 py-3 rounded-lg hover:bg-indigo-800 transition-colors">🏫 Level Kelas</Link>
                         </>
                     )}
                 </nav>
