@@ -8,6 +8,7 @@
 
 import UserService from "../services/userService.js";
 import AdminModel from '../models/adminModel.js';
+import TeacherModel from '../models/teacherModel.js';
 
 
 class UserController {
@@ -74,6 +75,13 @@ class UserController {
                 user = await AdminModel.findById(userId);
                 if (user) {
                     user.role = 'admin';
+                    user.full_name = user.full_name; // mapping consistent name
+                }
+            } else if (role === 'teacher') {
+                user = await TeacherModel.findById(userId);
+                if (user) {
+                    user.role = 'teacher';
+                    user.full_name = user.fullName; // Map fullName to full_name for frontend consistency
                 }
             } else {
                 // Jika User biasa, cari di UserService
@@ -198,6 +206,8 @@ class UserController {
 
             if (role === 'admin') {
                 await AdminModel.update(userId, { avatar: namaFileBaru });
+            } else if (role === 'teacher') {
+                await TeacherModel.update(userId, { avatar: namaFileBaru });
             } else {
                 // Jika User, simpan ke tabel User
                 await UserService.updateUser(userId, { avatar: namaFileBaru });

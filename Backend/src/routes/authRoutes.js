@@ -5,6 +5,7 @@ const routerAuth = Router();
 
 routerAuth.post("/login", AuthController.login);
 routerAuth.post("/login/admin", AuthController.loginAdmin);
+routerAuth.post("/login/teacher", AuthController.loginTeacher);
 
 routerAuth.post("/forgot-password", AuthController.forgotPassword);
 routerAuth.post("/reset-password/:token", AuthController.resetPassword);

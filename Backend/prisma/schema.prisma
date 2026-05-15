@@ -45,7 +45,9 @@ model Branch {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  students Student[]
+  students           Student[]
+  recurringSchedules RecurringSchedule[]
+  lessonSchedules    LessonSchedule[]
 }
 
 model Program {
@@ -55,7 +57,9 @@ model Program {
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
 
-  packages ProgramPackage[]
+  packages           ProgramPackage[]
+  schedules          LessonSchedule[]
+  recurringSchedules RecurringSchedule[]
 }
 
 model Level {
@@ -64,7 +68,8 @@ model Level {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  students Student[]
+  students           Student[]
+  recurringSchedules RecurringScheduleLevel[]
 }
 
 model Student {
@@ -82,6 +87,8 @@ model Student {
 
   transactions    Transaction[]
   studentPackages StudentPackage[]
+  attendances     Attendance[]
+  recurringSchedules RecurringScheduleStudent[]
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
@@ -158,4 +165,97 @@ model StudentPackage {
   student        Student        @relation(fields: [studentId], references: [id], onDelete: Cascade)
   programPackage ProgramPackage @relation(fields: [programPackageId], references: [id])
   transaction    Transaction    @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+  attendances    Attendance[]
+}
+
+model Teacher {
+  id         Int      @id @default(autoincrement())
+  fullName   String
+  email      String   @unique
+  password   String
+  telpNo     String?
+  avatar     String?  @default("avatar_default.png")
+  isActive   Boolean  @default(true)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  schedules LessonSchedule[]
+  recurring RecurringSchedule[]
+}
+
+model RecurringSchedule {
+  id          Int      @id @default(autoincrement())
+  teacherId   Int
+  programId   Int
+  branchId    Int?
+  dayOfWeek   Int      // 0-6 (Sunday-Saturday)
+  startTime   String   // "HH:mm"
+  endTime     String   // "HH:mm"
+  isActive    Boolean  @default(true)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  teacher  Teacher  @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  program  Program  @relation(fields: [programId], references: [id])
+  branch   Branch?  @relation(fields: [branchId], references: [id])
+  students RecurringScheduleStudent[]
+  levels   RecurringScheduleLevel[]
+}
+
+model RecurringScheduleLevel {
+  id                  Int               @id @default(autoincrement())
+  recurringScheduleId Int
+  levelId             Int
+  
+  recurringSchedule   RecurringSchedule @relation(fields: [recurringScheduleId], references: [id], onDelete: Cascade)
+  level               Level             @relation(fields: [levelId], references: [id], onDelete: Cascade)
+
+  @@unique([recurringScheduleId, levelId])
+}
+
+model RecurringScheduleStudent {
+  id                  Int               @id @default(autoincrement())
+  recurringScheduleId Int
+  studentId           Int
+  
+  recurringSchedule   RecurringSchedule @relation(fields: [recurringScheduleId], references: [id], onDelete: Cascade)
+  student             Student           @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@unique([recurringScheduleId, studentId])
+}
+
+model LessonSchedule {
+  id          Int      @id @default(autoincrement())
+  teacherId   Int
+  programId   Int
+  branchId    Int?
+  date        DateTime
+  startTime   DateTime
+  endTime     DateTime
+  status      String   @default("SCHEDULED") // SCHEDULED, COMPLETED, CANCELLED
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  teacher     Teacher      @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  program     Program      @relation(fields: [programId], references: [id])
+  branch      Branch?       @relation(fields: [branchId], references: [id])
+  attendances Attendance[]
+}
+
+model Attendance {
+  id               Int      @id @default(autoincrement())
+  scheduleId       Int
+  studentId        Int
+  studentPackageId Int
+  status           String   @default("PENDING") // PENDING, PRESENT, ABSENT, PERMIT
+  notes            String?  @db.Text
+  markedAt         DateTime?
+  created_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt
+
+  schedule       LessonSchedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  student        Student        @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  studentPackage StudentPackage @relation(fields: [studentPackageId], references: [id], onDelete: Cascade)
+
+  @@unique([scheduleId, studentId])
 }

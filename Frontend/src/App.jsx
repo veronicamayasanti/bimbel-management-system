@@ -14,6 +14,9 @@ import ProgramManagement from './pages/ProgramManagement';
 import LevelManagement from './pages/LevelManagement';
 import StudentManagement from './pages/StudentManagement';
 import TransactionManagement from './pages/TransactionManagement';
+import TeacherManagement from './pages/TeacherManagement';
+import ScheduleManagement from './pages/ScheduleManagement';
+import AttendanceManagement from './pages/AttendanceManagement';
 
 function App() {
   return (
@@ -38,6 +41,9 @@ function App() {
         <Route path="levels" element={<LevelManagement />} />
         <Route path="students" element={<StudentManagement />} />
         <Route path="transactions" element={<TransactionManagement />} />
+        <Route path="teachers" element={<TeacherManagement />} />
+        <Route path="schedules" element={<ScheduleManagement />} />
+        <Route path="attendance" element={<AttendanceManagement />} />
       </Route>
     </Routes>
   )

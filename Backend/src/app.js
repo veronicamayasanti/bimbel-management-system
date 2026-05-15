@@ -19,7 +19,8 @@ import programPackageRoutes from './routes/programPackageRoutes.js';
 import levelRoutes from './routes/levelRoutes.js';
 import studentRoutes from './routes/studentRoutes.js';
 import transactionRoutes from './routes/transactionRoutes.js';
-
+import teacherRoutes from './routes/teacherRoutes.js';
+import scheduleRoutes from './routes/scheduleRoutes.js';
 
 dotenv.config();
 
@@ -46,6 +47,8 @@ app.use("/api/program-packages", programPackageRoutes);
 app.use("/api/levels", levelRoutes);
 app.use("/api/students", studentRoutes);
 app.use("/api/transactions", transactionRoutes);
+app.use("/api/teachers", teacherRoutes);
+app.use("/api/schedules", scheduleRoutes);
 
 app.use(errorMiddleware);
 

@@ -44,14 +44,26 @@ const DashboardLayout = () => {
                 <nav className="flex-1 p-4 space-y-2">
                     <Link to="/dashboard" className="block px-4 py-3 rounded-lg hover:bg-indigo-800 transition-colors">🏠 Beranda</Link>
                     <Link to="/dashboard/profile" className="block px-4 py-3 rounded-lg hover:bg-indigo-800 transition-colors">👤 Profil Saya</Link>
-                    <Link to="/dashboard/students" className="block px-4 py-3 rounded-lg hover:bg-indigo-800 transition-colors">👨‍🎓 Data Anak / Siswa</Link>
-                    <Link to="/dashboard/transactions" className="block px-4 py-3 rounded-lg hover:bg-indigo-800 transition-colors">🧾 Transaksi</Link>
+                    {/* Menu khusus Wali Murid */}
+                    {user.role === 'user' && (
+                        <>
+                            <Link to="/dashboard/students" className="block px-4 py-3 rounded-lg hover:bg-indigo-800 transition-colors">👨‍🎓 Data Anak / Siswa</Link>
+                            <Link to="/dashboard/transactions" className="block px-4 py-3 rounded-lg hover:bg-indigo-800 transition-colors">🧾 Transaksi</Link>
+                        </>
+                    )}
                     <Link to="/dashboard/programs" className="block px-4 py-3 rounded-lg hover:bg-indigo-800 transition-colors">📚 Program</Link>
 
-                    {/* Menu Manajemen User HANYA muncul jika yang login adalah admin */}
+                    {(user.role === 'admin' || user.role === 'teacher') && (
+                        <Link to="/dashboard/attendance" className="block px-4 py-3 rounded-lg hover:bg-indigo-800 transition-colors">✅ Absensi</Link>
+                    )}
+
+                    {/* Menu Manajemen HANYA muncul jika yang login adalah admin */}
                     {user.role === 'admin' && (
                         <>
-                            <Link to="/dashboard/users" className="block px-4 py-3 rounded-lg hover:bg-indigo-800 transition-colors">👥 Manajemen Akun</Link>
+                            <div className="pt-4 pb-2 px-4 text-xs font-bold text-indigo-400 uppercase tracking-widest">Manajemen</div>
+                            <Link to="/dashboard/users" className="block px-4 py-3 rounded-lg hover:bg-indigo-800 transition-colors">👥 Akun User</Link>
+                            <Link to="/dashboard/teachers" className="block px-4 py-3 rounded-lg hover:bg-indigo-800 transition-colors">👨‍🏫 Guru</Link>
+                            <Link to="/dashboard/schedules" className="block px-4 py-3 rounded-lg hover:bg-indigo-800 transition-colors">📅 Master Jadwal</Link>
                             <Link to="/dashboard/branches" className="block px-4 py-3 rounded-lg hover:bg-indigo-800 transition-colors">📍 Cabang</Link>
                             <Link to="/dashboard/levels" className="block px-4 py-3 rounded-lg hover:bg-indigo-800 transition-colors">🏫 Level Kelas</Link>
                         </>

@@ -18,12 +18,20 @@ const Login = () => {
         try {
             let response;
 
-            // LOGIKA PINTAR: Jika mengandung '@' berarti User. Jika tidak, berarti Admin.
+            // LOGIKA PINTAR: 
             if (identifier.includes('@')) {
-                response = await axiosInstance.post('/auth/login', {
-                    email: identifier,
-                    password
-                });
+                try {
+                    // Coba login sebagai User (Orang Tua)
+                    response = await axiosInstance.post('/auth/login', { email: identifier, password });
+                } catch (err) {
+                    // Jika gagal, coba login sebagai Teacher
+                    try {
+                        response = await axiosInstance.post('/auth/login/teacher', { email: identifier, password });
+                    } catch (teacherErr) {
+                        // Jika keduanya gagal, lempar error asli dari percobaan pertama (atau gabungan)
+                        throw err; 
+                    }
+                }
             } else {
                 response = await axiosInstance.post('/auth/login/admin', {
                     username: identifier,

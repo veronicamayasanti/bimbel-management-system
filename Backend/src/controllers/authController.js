@@ -45,6 +45,26 @@ class AuthController {
         }
     }
 
+    static async loginTeacher(req, res, next) {
+        try {
+            const { email, password } = req.body;
+            const result = await AuthService.loginTeacher(email, password);
+
+            if (result) {
+                res.json({
+                    message: "Teacher login successful",
+                    token: result.token,
+                    teacher: result.teacher
+                });
+            } else {
+                res.status(401).json({ message: "Invalid email or password" });
+            }
+        } catch (error) {
+            console.error(error);
+            next(error);
+        }
+    }
+
 
     // Tambahkan di bawah fungsi loginAdmin
     static async forgotPassword(req, res, next) {

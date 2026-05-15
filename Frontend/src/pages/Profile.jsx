@@ -26,7 +26,7 @@ const Profile = () => {
     const [msgUpdate, setMsgUpdate] = useState({ type: '', text: '' });
     const [loadingUpdate, setLoadingUpdate] = useState(false);
 
-    // Otomatis mengisi form dengan data saat ini (jika user adalah 'user' biasa)
+    // Otomatis mengisi form dengan data saat ini
     useEffect(() => {
         if (user && user.role === 'user') {
             setFormData({
@@ -35,7 +35,31 @@ const Profile = () => {
                 address: user.address || ''
             });
         }
+        if (user && user.role === 'teacher') {
+            setFormTeacher({
+                fullName: user.fullName || user.full_name || '',
+                telpNo: user.telpNo || user.telp_no || '',
+            });
+        }
     }, [user]);
+
+    // 4. STATE & HANDLER UNTUK UPDATE BIODATA GURU
+    const [formTeacher, setFormTeacher] = useState({ fullName: '', telpNo: '' });
+    const [msgTeacher, setMsgTeacher] = useState({ type: '', text: '' });
+    const [loadingTeacher, setLoadingTeacher] = useState(false);
+
+    const handleUpdateTeacherData = async (e) => {
+        e.preventDefault();
+        setMsgTeacher({ type: '', text: '' });
+        setLoadingTeacher(true);
+        try {
+            await axiosInstance.put(`/teachers/${user.id}`, formTeacher);
+            setMsgTeacher({ type: 'success', text: 'Data berhasil diperbarui' });
+            setUser({ ...user, fullName: formTeacher.fullName, full_name: formTeacher.fullName });
+        } catch (error) {
+            setMsgTeacher({ type: 'error', text: error.response?.data?.message || 'Gagal mengubah data' });
+        } finally { setLoadingTeacher(false); }
+    };
 
     // Fungsi Handle Form (diperpendek agar fokus pada yang penting)
     const handlePasswordChange = async (e) => {
@@ -99,7 +123,7 @@ const Profile = () => {
                             alt="Profile"
                             className="w-32 h-32 mx-auto rounded-full object-cover border-4 border-indigo-50 shadow-md mb-4"
                         />
-                        <h2 className="text-xl font-bold text-gray-800">{user.full_name}</h2>
+                        <h2 className="text-xl font-bold text-gray-800">{user.fullName || user.full_name}</h2>
                         <p className="text-sm font-semibold text-gray-500 mb-2">{user.role.toUpperCase()}</p>
                         <p className="text-sm text-indigo-600 font-medium bg-indigo-50 py-1 px-3 rounded-full inline-block">
                             {user.email || user.username}
@@ -119,12 +143,11 @@ const Profile = () => {
                 {/* KOLOM KANAN: Form Update Data & Ganti Password */}
                 <div className="md:col-span-2 space-y-6">
 
-                    {/* FORM UPDATE BIODATA (Hanya Muncul Jika Role = User) */}
+                    {/* FORM UPDATE BIODATA USER (Hanya Muncul Jika Role = user) */}
                     {user.role === 'user' && (
                         <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                             <h3 className="text-xl font-bold text-gray-800 mb-6">Informasi Pribadi</h3>
                             {msgUpdate.text && (<div className={`p-4 rounded-lg mb-6 text-sm font-medium ${msgUpdate.type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>{msgUpdate.text}</div>)}
-
                             <form onSubmit={handleUpdateData} className="grid grid-cols-1 md:grid-cols-2 gap-5">
                                 <div className="md:col-span-2">
                                     <label className="block text-sm font-medium text-gray-700 mb-1">Nama Lengkap</label>
@@ -138,10 +161,32 @@ const Profile = () => {
                                     <label className="block text-sm font-medium text-gray-700 mb-1">Alamat Domisili</label>
                                     <textarea value={formData.address} onChange={(e) => setFormData({ ...formData, address: e.target.value })} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 bg-gray-50" rows="3"></textarea>
                                 </div>
-
                                 <div className="md:col-span-2 text-right mt-2">
                                     <button type="submit" disabled={loadingUpdate} className="px-8 py-3 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700 transition disabled:opacity-50 shadow-md">
                                         {loadingUpdate ? 'Menyimpan...' : 'Simpan Perubahan Data'}
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    )}
+
+                    {/* FORM UPDATE BIODATA GURU */}
+                    {user.role === 'teacher' && (
+                        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                            <h3 className="text-xl font-bold text-gray-800 mb-6">Informasi Guru</h3>
+                            {msgTeacher.text && (<div className={`p-4 rounded-lg mb-6 text-sm font-medium ${msgTeacher.type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>{msgTeacher.text}</div>)}
+                            <form onSubmit={handleUpdateTeacherData} className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                <div className="md:col-span-2">
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Nama Lengkap</label>
+                                    <input type="text" value={formTeacher.fullName} onChange={(e) => setFormTeacher({ ...formTeacher, fullName: e.target.value })} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 bg-gray-50" required />
+                                </div>
+                                <div className="md:col-span-2">
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Nomor Telepon</label>
+                                    <input type="text" value={formTeacher.telpNo} onChange={(e) => setFormTeacher({ ...formTeacher, telpNo: e.target.value })} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 bg-gray-50" />
+                                </div>
+                                <div className="md:col-span-2 text-right mt-2">
+                                    <button type="submit" disabled={loadingTeacher} className="px-8 py-3 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700 transition disabled:opacity-50 shadow-md">
+                                        {loadingTeacher ? 'Menyimpan...' : 'Simpan Perubahan Data'}
                                     </button>
                                 </div>
                             </form>

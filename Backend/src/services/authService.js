@@ -1,5 +1,6 @@
 import UserModel from "../models/userModel.js";
 import AdminModel from "../models/adminModel.js"
+import TeacherModel from "../models/teacherModel.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
@@ -40,6 +41,27 @@ class AuthService {
         );
         return { token, admin };
 
+    }
+
+    static async loginTeacher(email, password) {
+        const teacher = await TeacherModel.findByEmail(email);
+        if (!teacher) return null;
+
+        const isMatch = await bcrypt.compare(password, teacher.password);
+        if (!isMatch) return null;
+
+        if (!teacher.isActive) {
+            throw new Error("Akun guru sudah tidak aktif");
+        }
+
+        const token = jwt.sign(
+            { id: teacher.id, role: 'teacher' },
+            process.env.JWT_SECRET,
+            { expiresIn: "1d" }
+        );
+
+        const { password: _, ...teacherWithoutPassword } = teacher;
+        return { token, teacher: teacherWithoutPassword };
     }
 
 

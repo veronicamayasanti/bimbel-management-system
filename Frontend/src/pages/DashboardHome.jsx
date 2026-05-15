@@ -10,7 +10,7 @@ const DashboardHome = () => {
 
     useEffect(() => {
         const fetchStudents = async () => {
-            if (user.role !== 'admin') {
+            if (user.role === 'user') { // Hanya untuk Wali Murid
                 try {
                     setLoading(true);
                     const res = await axiosInstance.get('/students');
@@ -44,17 +44,19 @@ const DashboardHome = () => {
                 <div className="absolute bottom-0 right-20 -mb-10 w-32 h-32 bg-white opacity-10 rounded-full blur-xl"></div>
 
                 <div className="relative z-10">
-                    <h1 className="text-3xl font-extrabold mb-2">{greeting}, {user.full_name}! 👋</h1>
+                    <h1 className="text-3xl font-extrabold mb-2">{greeting}, {user.fullName || user.full_name}! 👋</h1>
                     <p className="text-indigo-100 text-lg max-w-xl">
                         {user.role === 'admin'
                             ? 'Selamat datang di Panel Kontrol Administrator. Anda memegang kendali penuh atas sistem BimbelPro hari ini.'
+                            : user.role === 'teacher'
+                            ? 'Selamat datang, Guru! Semangat mengajar hari ini. Jangan lupa cek jadwal dan isi absensi murid Anda.'
                             : 'Selamat datang di portal siswa BimbelPro. Tetap semangat belajar dan raih cita-citamu!'}
                     </p>
                 </div>
             </div>
 
-            {/* 2. PAKET BELAJAR AKTIF (Khusus User/Orang Tua) */}
-            {user.role !== 'admin' && (
+            {/* 2. PAKET BELAJAR AKTIF (Khusus Wali Murid saja) */}
+            {user.role === 'user' && (
                 <div className="mt-8">
                     <div className="flex justify-between items-center mb-4">
                         <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
