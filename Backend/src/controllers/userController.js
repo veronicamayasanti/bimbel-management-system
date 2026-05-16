@@ -9,6 +9,25 @@
 import UserService from "../services/userService.js";
 import AdminModel from '../models/adminModel.js';
 import TeacherModel from '../models/teacherModel.js';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Helper: Hapus file avatar lama jika bukan default
+const deleteOldAvatar = (filename) => {
+    if (!filename || filename === 'avatar_default.png') return;
+    const filePath = path.join(__dirname, '../../public/uploads', filename);
+    fs.unlink(filePath, (err) => {
+        if (err && err.code !== 'ENOENT') {
+            console.error(`[Avatar] Gagal menghapus file lama: ${filePath}`, err.message);
+        } else if (!err) {
+            console.log(`[Avatar] File lama berhasil dihapus: ${filename}`);
+        }
+    });
+};
 
 
 class UserController {
@@ -204,14 +223,24 @@ class UserController {
             const role = req.user.role;
             const namaFileBaru = req.file.filename;
 
+            // 1. Ambil avatar lama sebelum diupdate
+            let avatarLama = null;
             if (role === 'admin') {
+                const admin = await AdminModel.findById(userId);
+                avatarLama = admin?.avatar;
                 await AdminModel.update(userId, { avatar: namaFileBaru });
             } else if (role === 'teacher') {
+                const teacher = await TeacherModel.findById(userId);
+                avatarLama = teacher?.avatar;
                 await TeacherModel.update(userId, { avatar: namaFileBaru });
             } else {
-                // Jika User, simpan ke tabel User
+                const user = await UserService.getUserById(userId);
+                avatarLama = user?.avatar;
                 await UserService.updateUser(userId, { avatar: namaFileBaru });
             }
+
+            // 2. Hapus file lama dari disk (async, tidak blocking response)
+            deleteOldAvatar(avatarLama);
 
             res.json({
                 success: true,

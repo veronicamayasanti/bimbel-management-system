@@ -14,9 +14,11 @@ import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import cors from 'cors';
+import swaggerUi from 'swagger-ui-express';
 
 import connectDB from './config/db.js';
 import errorMiddleware from './middleware/errorMiddleware.js';
+import { swaggerSpec } from './config/swagger.js';
 
 import userRoutes from './routes/userRoutes.js';
 import authRoutes from './routes/authRoutes.js';
@@ -41,6 +43,15 @@ app.use(cors({
 
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')));
+
+// Swagger API Documentation — http://localhost:3000/api-docs
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+    customSiteTitle: 'BimbelPro API Docs',
+    customCss: '.swagger-ui .topbar { background-color: #312e81; }',
+    swaggerOptions: { persistAuthorization: true }
+}));
+// Endpoint untuk download spec JSON (berguna untuk Postman import)
+app.get('/api-docs.json', (req, res) => res.json(swaggerSpec));
 
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
