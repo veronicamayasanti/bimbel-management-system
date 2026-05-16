@@ -6,13 +6,20 @@
  * Email: veronicamayasanti@gmail.com
  */
 
-import express from 'express';
+// dotenv.config() harus dipanggil paling awal sebelum import lainnya
 import dotenv from 'dotenv';
+dotenv.config();
+
+import express from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import cors from 'cors';
+
 import connectDB from './config/db.js';
+import errorMiddleware from './middleware/errorMiddleware.js';
+
 import userRoutes from './routes/userRoutes.js';
 import authRoutes from './routes/authRoutes.js';
-import errorMiddleware from './middleware/errorMiddleware.js';
-import cors from 'cors';
 import branchRoutes from './routes/branchRoutes.js';
 import programRoutes from './routes/programRoutes.js';
 import programPackageRoutes from './routes/programPackageRoutes.js';
@@ -21,11 +28,6 @@ import studentRoutes from './routes/studentRoutes.js';
 import transactionRoutes from './routes/transactionRoutes.js';
 import teacherRoutes from './routes/teacherRoutes.js';
 import scheduleRoutes from './routes/scheduleRoutes.js';
-
-dotenv.config();
-
-import path from 'path';
-import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -39,7 +41,8 @@ app.use(cors({
 
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')));
-app.use("/api/users", userRoutes)
+
+app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/branches", branchRoutes);
 app.use("/api/programs", programRoutes);
@@ -60,5 +63,3 @@ connectDB().then(() => {
 }).catch(err => {
     console.error("Failed to start server:", err);
 });
-
-

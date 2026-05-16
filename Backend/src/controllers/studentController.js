@@ -40,18 +40,36 @@ class StudentController {
      */
     static async getStudents(req, res, next) {
         try {
-            let students;
-            
             if (req.user.role === 'admin') {
-                students = await StudentService.getAllStudents();
+                const page = parseInt(req.query.page) || 1;
+                const limit = parseInt(req.query.limit) || 10;
+                
+                // Only pass filters that actually have values
+                const filters = {};
+                if (req.query.search) filters.search = req.query.search;
+                if (req.query.branchId) filters.branchId = req.query.branchId;
+                if (req.query.levelId) filters.levelId = req.query.levelId;
+                
+                const { students, total } = await StudentService.getAllStudents(page, limit, filters);
+                
+                return res.status(200).json({
+                    success: true,
+                    data: students,
+                    pagination: {
+                        total,
+                        page,
+                        limit,
+                        totalPages: Math.ceil(total / limit)
+                    }
+                });
             } else {
-                students = await StudentService.getStudentsByParent(req.user.id);
+                const search = req.query.search || "";
+                const students = await StudentService.getStudentsByParent(req.user.id, search);
+                return res.status(200).json({
+                    success: true,
+                    data: students
+                });
             }
-
-            res.status(200).json({
-                success: true,
-                data: students
-            });
         } catch (error) {
             next(error);
         }

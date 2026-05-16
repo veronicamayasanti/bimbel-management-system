@@ -216,7 +216,7 @@ class UserController {
             res.json({
                 success: true,
                 message: "Foto profil berhasil diperbarui!",
-                avatar_url: `${process.env.FRONTEND_URL ? process.env.FRONTEND_URL.replace(':5173', ':3000') : 'http://localhost:3000'}/uploads/${namaFileBaru}`
+                avatar_url: `${process.env.BACKEND_URL || 'http://localhost:3000'}/uploads/${namaFileBaru}`
             });
         } catch (error) {
             next(error);

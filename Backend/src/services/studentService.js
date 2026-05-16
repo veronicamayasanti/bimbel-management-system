@@ -9,17 +9,22 @@ class StudentService {
     }
 
     /**
-     * Get all students (Admin use)
+     * Get all students with pagination and filters (Admin use)
      */
-    static async getAllStudents() {
-        return StudentModel.findAll();
+    static async getAllStudents(page = 1, limit = 10, filters = {}) {
+        const skip = (page - 1) * limit;
+        const [students, total] = await Promise.all([
+            StudentModel.findAll(skip, limit, filters),
+            StudentModel.countAll(filters)
+        ]);
+        return { students, total };
     }
 
     /**
      * Get students by parent ID (User use)
      */
-    static async getStudentsByParent(parentId) {
-        return StudentModel.findByParentId(parentId);
+    static async getStudentsByParent(parentId, search = "") {
+        return StudentModel.findByParentId(parentId, search);
     }
 
     /**
