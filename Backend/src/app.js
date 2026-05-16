@@ -43,6 +43,7 @@ app.use(cors({
 
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')));
+app.use(express.static(path.join(__dirname, '../public')));
 
 // Swagger API Documentation — http://localhost:3000/api-docs
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
