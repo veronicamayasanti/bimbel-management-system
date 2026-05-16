@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useOutletContext } from 'react-router-dom';
-import axiosInstance from '../api/axiosInstance';
+import axiosInstance, { API_BASE_URL } from '../api/axiosInstance';
 import toast from 'react-hot-toast';
 import { Users, Plus, Edit2, Trash2, Search, UserCircle } from 'lucide-react';
 import TeacherFormModal from '../components/TeacherFormModal';
@@ -157,8 +157,16 @@ const TeacherManagement = () => {
                     {filteredTeachers.map((teacher) => (
                         <div key={teacher.id} className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-all group">
                             <div className="flex items-start justify-between mb-4">
-                                <div className="w-14 h-14 bg-indigo-50 rounded-2xl flex items-center justify-center text-indigo-600 font-bold text-xl">
-                                    {teacher.fullName.charAt(0)}
+                                <div className="w-14 h-14 bg-indigo-50 rounded-2xl flex items-center justify-center text-indigo-600 font-bold text-xl overflow-hidden border border-indigo-100">
+                                    {teacher.avatar ? (
+                                        <img 
+                                            src={`${API_BASE_URL}/uploads/${teacher.avatar}`} 
+                                            alt={teacher.fullName} 
+                                            className="w-full h-full object-cover"
+                                        />
+                                    ) : (
+                                        teacher.fullName.charAt(0)
+                                    )}
                                 </div>
                                 <div className={`px-3 py-1 rounded-full text-xs font-bold ${teacher.isActive ? 'bg-emerald-50 text-emerald-600' : 'bg-gray-100 text-gray-500'}`}>
                                     {teacher.isActive ? 'Aktif' : 'Nonaktif'}

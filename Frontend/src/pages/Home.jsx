@@ -28,9 +28,11 @@ const Home = () => {
         setIsModalOpen(true);
     };
 
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+
     return (
         <div className="bg-[#f8f9fa] text-[#191c1d] font-['Plus_Jakarta_Sans',sans-serif]">
-            {/* Inject CSS custom for symbols and fonts - menggunakan pendekatan standar React */}
+            {/* Inject CSS custom for symbols and fonts */}
             <style dangerouslySetInnerHTML={{__html: `
                 @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
                 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
@@ -47,23 +49,46 @@ const Home = () => {
                     <div className="flex items-center gap-3">
                         <img 
                             alt="Rumah Belajar Ms Kiki Logo" 
-                            className="h-10 w-auto" 
+                            className="h-8 md:h-10 w-auto" 
                             src="https://lh3.googleusercontent.com/aida-public/AB6AXuDX6n8YUNF0Gc5k6Ppuy2HtsTmuJqHCmR3eBCNoh7rPj8pmNAVuZ0qNvwp3U9iP-KWYVglLw3p19oFM_75HbtGXH5hptVgjVqBQOAgBkc8aAanSHML-3xW7VDWW6MNo8PTxeKVjx9a-IB9S0gLAi8wH1TdrGpFtfd2uL9VSJNyyAG9ufyUGcF1cYj8uhUoerHTXTTLry2FY8exWSVuXs_sDDof0UP-mmQaHSgfI8d-7Ai4-WznDjiwSld_ueDMCMeR4iTdnyEXZPh8"
                         />
-                        <span className="text-xl font-black text-blue-900 tracking-tight font-lexend">Rumah Belajar Ms Kiki</span>
+                        <span className="text-lg md:text-xl font-black text-blue-900 tracking-tight font-lexend line-clamp-1">Rumah Belajar Ms Kiki</span>
                     </div>
-                    <nav className="hidden md:flex items-center gap-8 font-lexend font-medium text-base">
+                    <nav className="hidden lg:flex items-center gap-8 font-lexend font-medium text-base">
                         <a className="text-blue-900 font-bold border-b-2 border-yellow-400 pb-1" href="#">Home</a>
                         <a className="text-slate-600 hover:text-blue-800 transition-all duration-200" href="#">Programs</a>
                         <a className="text-slate-600 hover:text-blue-800 transition-all duration-200" href="#">Tutors</a>
                         <a className="text-slate-600 hover:text-blue-800 transition-all duration-200" href="#">Pricing</a>
                     </nav>
-                    <div className="flex items-center gap-4">
-                        {/* Tombol Login diarahkan ke halaman /login */}
+                    <div className="hidden md:flex items-center gap-4">
                         <Link to="/login" className="px-5 py-2.5 font-bold text-[#001e40] hover:bg-slate-50 rounded-lg transition-all active:scale-95">Login</Link>
                         <Link to="/register" className="px-6 py-2.5 bg-[#fcd400] text-[#001e40] font-bold rounded-xl btn-shadow transition-all active:scale-95 text-center">Register Now</Link>
                     </div>
+                    {/* Mobile Menu Button */}
+                    <button 
+                        className="lg:hidden p-2 text-blue-900"
+                        onClick={() => setIsMenuOpen(!isMenuOpen)}
+                    >
+                        <span className="material-symbols-outlined text-3xl">
+                            {isMenuOpen ? 'close' : 'menu'}
+                        </span>
+                    </button>
                 </div>
+
+                {/* Mobile Navigation */}
+                {isMenuOpen && (
+                    <div className="lg:hidden bg-white border-b border-slate-100 p-6 space-y-4 font-lexend">
+                        <a className="block text-blue-900 font-bold" href="#">Home</a>
+                        <a className="block text-slate-600 font-medium" href="#">Programs</a>
+                        <a className="block text-slate-600 font-medium" href="#">Tutors</a>
+                        <a className="block text-slate-600 font-medium" href="#">Pricing</a>
+                        <hr className="border-slate-100" />
+                        <div className="flex flex-col gap-3 pt-2">
+                            <Link to="/login" className="w-full py-3 font-bold text-[#001e40] text-center border-2 border-slate-100 rounded-xl">Login</Link>
+                            <Link to="/register" className="w-full py-3 bg-[#fcd400] text-[#001e40] font-bold rounded-xl text-center btn-shadow">Register Now</Link>
+                        </div>
+                    </div>
+                )}
             </header>
 
             <main>
